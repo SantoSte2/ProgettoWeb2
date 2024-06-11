@@ -8,13 +8,13 @@
             <div class="mb-3">
               <label for="text">Titolo Libro</label>
               <!--una volta che inseriamo gli attributi del libro dobbiamo memorizzarli con la direttiva v-model su tutti e due i campi che chiediamo sia testolibro che le copie-->
-              <input type="text"id="text" v-model="titoloLibro" placeholder="Iserisci titolo libro...">
+              <input type="text"id="text" v-model="titoloLibro" placeholder="Inserisci titolo libro...">
             </div>
             <div class="mb-3">
               <label for="copie">Numero Copie</label>
-              <input type="number" id="numueroCopie" v-model="copieLibro" placeholder="Inserici il numero copie libro...">
+              <input type="number" id="numeroCopie" value="1" min="1" v-model="copieLibro" placeholder="Inserici il numero copie libro...">
             </div>
-          <button class="btn btn-primary">Inserisci valori Libro</button>
+          <button class="btn btn-primary">Invia</button>
         </form>
     
   </div>

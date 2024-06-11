@@ -18,7 +18,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="exampleFormControlTextarea1" class="form-label">Breve Intro</label>
-                        <textarea class="form-control" id="Descrizione" v-model="descrizione" placeholder="Iserisci una breve descrizone" rows="3"></textarea>
+                        <textarea class="form-control" id="Descrizione" v-model="descrizione" placeholder="Inserisci una breve descrizone" rows="3"></textarea>
                     </div>
                     <div class="row">
                         <div class="col-10"></div>
