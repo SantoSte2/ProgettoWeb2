@@ -1,7 +1,7 @@
 <template>
 
   <ListaLibri :listaLibri="listaLibri" />
-
+  <Footer />
   
 
 </template>
@@ -9,6 +9,8 @@
 <script setup>
 
 import ListaLibri from '../components/ListaLibri.vue';
+import Footer from '@/components/Footer.vue';
+
 
 import { defineProps } from 'vue';
 import { ref, computed, onMounted} from 'vue';

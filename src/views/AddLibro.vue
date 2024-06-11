@@ -2,6 +2,7 @@
 
   <AddLibro @libroSubmitted="handleLibroSubmitted" />
   <AddCard @cardSubmitted="handleCardSubmitted" />
+  <Footer />
   
 </template>
 
@@ -9,6 +10,8 @@
 
 import AddLibro from '../components/AddLibro.vue';
 import AddCard from '../components/AddCard.vue';
+import Footer from '@/components/Footer.vue';
+
 
 import { ref, computed, onMounted} from 'vue';
 import { generateCodeFrame } from 'vue/compiler-sfc';

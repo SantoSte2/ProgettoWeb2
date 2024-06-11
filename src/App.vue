@@ -3,7 +3,6 @@
     <Header />
     <NavBar />
 
-
     <RouterView />
   </div>
 </template>
@@ -29,6 +28,7 @@
   import Login from './views/Login.vue';
   import AddLibro from './views/AddLibro.vue';
   import About from './views/About.vue';
+  import Footer from './components/Footer.vue';
 
 
 </script>

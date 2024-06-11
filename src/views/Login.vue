@@ -2,9 +2,7 @@
 
     <About />
     <Login />
-    
-
-   
+    <Footer /> 
 
 </template>
 
@@ -12,6 +10,7 @@
 
 import Login from '../components/Login.vue';
 import About from '../components/About.vue';
+import Footer from '@/components/Footer.vue';
 
 
 import { ref, computed, onMounted} from 'vue';

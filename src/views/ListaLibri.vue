@@ -1,11 +1,11 @@
 <template>
 
-    <ListaLibri 
+    <!-- <ListaLibri 
       :listaLibri="listaLibri" 
       @libroCancellato="handleLibroDeleted"
       @prenotaLibro="handleLibroPrenotato"
       @addcopieLibro="handleLibroAggiunto"
-    />
+    /> -->
     <!-- <About /> -->
     <CardLibri 
       :cardLibri="cardLibri"
@@ -13,8 +13,7 @@
       @prenotaCard="handleCardPrenotata"
       @addcopieCard="handleCardAggiunta"
     />
-
-  
+    <Footer />
 
 </template>
 
@@ -23,6 +22,7 @@
 import ListaLibri from '../components/ListaLibri.vue';
 import CardLibri from '../components/CardLibri.vue';
 import About from '../components/About.vue';
+import Footer from '@/components/Footer.vue';
 
 import { ref, computed, onMounted} from 'vue';
 import { generateCodeFrame } from 'vue/compiler-sfc';
