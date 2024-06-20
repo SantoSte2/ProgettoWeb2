@@ -1,7 +1,5 @@
 <template>
 
-
-
     <div class="col-12">
         <div class="card-group mx-4 my-2">
 
@@ -12,32 +10,34 @@
                         <h5 class="card-title">{{ card.titoloCard }}</h5>
                         <h5>{{ card.copieCard }}</h5>
                         <p class="card-text">{{ card.descrizione }}</p>
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-6">
-                                    <button class="btn btn-primary" v-show="(card.copieCard)"
-                                        @click="prenotaCard(card.id)">PRENOTA</button>
-                                </div>
-                                <div class="col-6">
-                                    <button class="btn btn-warning" v-if="(card.copieCard) <= 0"
-                                        @click="metticodaCard">CODA</button>
-                                </div>
-
+                    </div>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-6">
+                                <button class="btn btn-primary btn-sm" v-show="(card.copieCard)"
+                                    @click="prenotaCard(card.id)">PRENOTA</button>
                             </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <button class="btn btn-primary" @click="addcopieCard(card.id)">RESTITUISCI</button>
-                                </div>
-                                <div class="col-6">
-                                    <button class="btn btn-primary" @click="cancellaCard(card.id)">CANCELLA</button>
-                                </div>
+                            <div class="col-6">
+                                <button class="btn btn-warning btn-sm" v-if="(card.copieCard) <= 0"
+                                    @click="metticodaCard">CODA</button>
                             </div>
-
-
-
 
                         </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <button class="btn btn-primary btn-sm"
+                                    @click="addcopieCard(card.id)">RESTITUISCI</button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-primary btn-sm" @click="cancellaCard(card.id)">CANCELLA</button>
+                            </div>
+                        </div>
+
+
+
+
                     </div>
+
                 </div>
 
             </div>
