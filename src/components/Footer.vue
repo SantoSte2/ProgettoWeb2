@@ -1,6 +1,6 @@
 <template>
-    <div class="container">
-        <div class="row">
+    <div class="container mt-5 mb-5">
+        <div class=" row">
             <div class="col-sm-8">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">Sito internet fatto da Stefano S. al Front-End e Andrea P. al Back-End
@@ -9,11 +9,16 @@
                     <li class="list-group-item">ESAME DI INGEGNERIA WEB</li>
                     <li class="list-group-item">Università di Bologna</li>
                     <li class="list-group-item">Campus Cesena</li>
+                    <li class="list-group-item">La Libreria</li>
                 </ul>
             </div>
             <div class="col-sm-4">
-                <img src="../assets/things-to-do-with-books-you-will-no-longer-read-500px.jpg"
-                    class="img-fluid rounded float-end" alt="book">
+
+                <div class="text-end">
+                    <img src="../assets/things-to-do-with-books-you-will-no-longer-read-500px.jpg"
+                        class="rounded float-end" alt="book" width="250" height="250">
+                </div>
+
             </div>
         </div>
 

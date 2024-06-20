@@ -1,7 +1,7 @@
 <template>
 
 
-    <div class="container mx-4 px-2 border">
+    <div class="container mx-4 my-2 px-2 py-3 border">
         <h3>Aggiungi Libro</h3>
         <form id="addcard" @submit.prevent="onSubmit">
             <div class="mb-3">
