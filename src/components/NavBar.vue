@@ -14,9 +14,9 @@
             <div class="navbar-nav">
               <RouterLink class="nav-link active" aria-current="page" to="/">Home
               </RouterLink>
-              <RouterLink class="nav-link" aria-current="page" to="/ListaLibri">ListaLibri
+              <RouterLink class="nav-link" aria-current="page" to="/ListaLibri">Libri Prenotati
               </RouterLink>
-              <RouterLink class="nav-link" aria-current="page" to="/AddLibro">AddLibro
+              <RouterLink class="nav-link" aria-current="page" to="/AddLibro">Aggiungi Libro
               </RouterLink>
               <RouterLink class="nav-link" aria-current="page" to="/Login">Login
               </RouterLink>
