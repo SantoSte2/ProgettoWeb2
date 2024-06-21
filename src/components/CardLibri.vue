@@ -5,7 +5,7 @@
 
             <div class="row">
                 <div class="card col-3" v-for="card in cardLibri" :key="card.id">
-                    <img src="" class="card-img-top" alt="...">
+                    <img :src="card.imgurl" class="card-img-top" :alt="'copertina ' + card.titoloCard">
                     <div class="card-body">
                         <h5 class="card-title">{{ card.titoloCard }}</h5>
                         <h5>{{ card.copieCard }}</h5>

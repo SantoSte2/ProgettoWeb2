@@ -20,9 +20,14 @@
                     placeholder="Inserisci il numero copie">
             </div>
             <div class="mb-3">
+                <label for="exampleFormControlTextarea2" class="form-label">Url Copertina</label>
+                <input type="text" class="form-control" id="Copertina" v-model="imgurl"
+                    placeholder="Inserisci l'Url della copertina">
+            </div>
+            <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Breve Intro</label>
                 <textarea class="form-control" id="Descrizione" v-model="descrizione"
-                    placeholder="Iserisci una breve descrizone" rows="3"></textarea>
+                    placeholder="Inserisci una breve descrizone" rows="3"></textarea>
             </div>
             <div class="row">
                 <div class="col-10"></div>
@@ -47,6 +52,7 @@ const titoloCard = ref('');
 const autoreCard = ref('');
 const copieCard = ref();
 const descrizione = ref('');
+const imgurl = ref('');
 
 const emit = defineEmits(['cardSubmitted', 'onSubmit']);
 
@@ -66,7 +72,8 @@ const onSubmit = () => {
         titoloCard: titoloCard.value,
         autoreCard: autoreCard.value,
         copieCard: copieCard.value,
-        descrizione: descrizione.value
+        descrizione: descrizione.value,
+        imgurl: imgurl.value
     }
 
     emit('cardSubmitted', cardData);
@@ -75,6 +82,7 @@ const onSubmit = () => {
     autoreCard.value = '';
     copieCard.value = 0;
     descrizione.value = '';
+    imgurl.value = '';
 
 };
 

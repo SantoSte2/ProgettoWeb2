@@ -55,7 +55,8 @@ const handleCardSubmitted = (cardData) => {
     titoloCard: cardData.titoloCard,
     autoreCard: cardData.autoreCard,
     copieCard: cardData.copieCard,
-    descrizione: cardData.descrizione
+    descrizione: cardData.descrizione,
+    imgurl: cardData.imgurl
   });
 
   listacardDaSalvare();
