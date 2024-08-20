@@ -1,11 +1,12 @@
 <?php
 header('Access-Control-Allow-Origin: http://127.0.0.1:5173');
 header('Content-Type: application/json');
-// Connessione al database (sostituisci con i tuoi dati)
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "biblio";
+
+
+$servername = 'localhost';
+$username = 'root';
+$password = '';
+$dbname = 'biblio';
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
