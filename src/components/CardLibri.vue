@@ -47,7 +47,7 @@ const libri = ref([]);
 
 onMounted(async () => {
   try {
-    const response = await axios.get('http://localhost/search.php');
+    const response = await axios.get('http://localhost:3000/api/libri');
     libri.value = response.data;
   } catch (error) {
     console.error('Errore durante il caricamento dei libri:', error);
@@ -56,7 +56,7 @@ onMounted(async () => {
 
 const cancellaCard = async (id) => {
   try {
-    await axios.delete(`http://localhost/delete.php?id=${id}`);
+    await axios.delete(`http://localhost:3000/api/libri/${id}`);
     libri.value = libri.value.filter(libro => libro.idLibro !== id);
     alert('Libro cancellato con successo');
   } catch (error) {
@@ -68,7 +68,7 @@ const prenotaCard = async (id) => {
   try {
     const libro = libri.value.find(libro => libro.idLibro === id);
     if (libro.numCopie > 0) {
-      await axios.patch(`http://localhost/prenota.php?id=${id}`);
+      await axios.patch(`http://localhost:3000/api/libri/prenota/${id}`);
       libro.numCopie--;
       alert('Libro prenotato con successo');
     }
@@ -79,7 +79,7 @@ const prenotaCard = async (id) => {
 
 const addcopieCard = async (id) => {
   try {
-    await axios.patch(`http://localhost/restituisci.php?id=${id}`);
+    await axios.patch(`http://localhost:3000/api/libri/restituisci/${id}`);
     const libro = libri.value.find(libro => libro.idLibro === id);
     libro.numCopie++;
     alert('Libro restituito con successo');

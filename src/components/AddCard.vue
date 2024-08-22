@@ -43,8 +43,8 @@
 </template>
 
 <script setup>
-
 import { ref } from 'vue';
+import axios from 'axios';
 import { useToast } from 'vue-toastification';
 
 // impongo vuoti o azzerati i valori del form per ritrovarli vuoti quando ricarico la pagina
@@ -54,36 +54,40 @@ const copieCard = ref();
 const descrizione = ref('');
 const imgurl = ref('');
 
-const emit = defineEmits(['cardSubmitted', 'onSubmit']);
-
-
 const toast = useToast();
 
-const onSubmit = () => {
-
-    if (!titoloCard.value || !copieCard.value || !autoreCard.value || !descrizione.value) {
-
+const onSubmit = async () => {
+    if (!titoloCard.value || !copieCard.value || !autoreCard.value || !descrizione.value || !imgurl.value) {
         toast.error('Campi non completati');
         return;
     }
 
     const cardData = {
-
         titoloCard: titoloCard.value,
         autoreCard: autoreCard.value,
         copieCard: copieCard.value,
         descrizione: descrizione.value,
         imgurl: imgurl.value
+    };
+
+    try {
+        // Invio dei dati al server tramite una richiesta POST
+        const response = await axios.post('http://localhost:3000/api/libri/aggiungi', cardData);
+
+        // Se l'inserimento è riuscito, mostra un messaggio di successo
+        toast.success('Libro aggiunto con successo!');
+
+        // Pulisci i campi del form
+        titoloCard.value = '';
+        autoreCard.value = '';
+        copieCard.value = 0;
+        descrizione.value = '';
+        imgurl.value = '';
+    } catch (error) {
+        // Se c'è un errore, mostra un messaggio di errore
+        toast.error('Errore durante l\'aggiunta del libro');
+        console.error('Errore durante l\'invio dei dati:', error);
     }
-
-    emit('cardSubmitted', cardData);
-
-    titoloCard.value = '';
-    autoreCard.value = '';
-    copieCard.value = 0;
-    descrizione.value = '';
-    imgurl.value = '';
-
 };
-
 </script>
+
