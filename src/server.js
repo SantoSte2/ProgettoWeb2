@@ -106,6 +106,41 @@ app.post('/api/libri/aggiungi', (req, res) => {
     });
 });
 
+// Endpoint per il login
+app.post('/api/login', (req, res) => {
+    const { email, password } = req.body;
+  
+    const query = 'SELECT * FROM utente WHERE username = ?';
+    connection.query(query, [email], (error, results) => {
+      if (error) {
+        console.error('Errore durante la query:', error);
+        res.status(500).json({ error: 'Errore nella query al database.' });
+        return;
+      }
+  
+      if (results.length > 0) {
+        const user = results[0];
+  
+        // Controlla se la password corrisponde
+        if (user.password === password) {
+          // Rimuovi la password dall'oggetto user prima di inviarlo al client
+          delete user.password;
+
+          res.status(200).json({ 
+            success: true, 
+            message: 'Login avvenuto con successo!', 
+            user // Invia i dati dell'utente al client
+          });
+        } else {
+          res.status(401).json({ success: false, message: 'Credenziali non valide' });
+        }
+      } else {
+        res.status(401).json({ success: false, message: 'Credenziali non valide' });
+      }
+    });
+  });
+  
+
 // Avvio del server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

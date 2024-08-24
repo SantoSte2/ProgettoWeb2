@@ -16,6 +16,7 @@
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "mysql": "^2.18.1",
+    "pinia": "^2.2.2",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
     "vue-toastification": "^2.0.0-rc.5"
