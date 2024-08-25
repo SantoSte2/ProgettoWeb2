@@ -50,11 +50,8 @@ const onSubmit = async () => {
       password: password.value,
     });
 
-    console.log('Server response:', response.data); // Verifica la risposta del server
-
     if (response.data.success) {
       userStore.setUser(response.data.user); // Salva l'utente nello store
-      console.log('User after login:', userStore.user); // Verifica se l'utente è stato impostato correttamente
       toast.success('Login riuscito');
       router.push('/');
     } else {

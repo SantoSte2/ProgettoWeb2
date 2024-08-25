@@ -6,27 +6,30 @@
           <img :src="libro.immagine" class="card-img-top" :alt="'copertina ' + libro.Titolo">
           <div class="card-body">
             <h5 class="card-title">{{ libro.Titolo }}</h5>
-            <h5>Copie: {{ libro.numCopie }}</h5>
+            <h5>Copie Disponibili: {{ libro.numCopie }}</h5>
             <p class="card-text">{{ libro.trama }}</p>
           </div>
           <div class="container-fluid">
             <div class="row">
               <div class="col-6">
-                <button class="btn btn-primary btn-sm" v-if="isLoggedIn" v-show="(libro.numCopie > 0)"
+                <!-- Mostra il pulsante "Prenota" solo se l'utente è loggato e non ha prenotato il libro -->
+                <button class="btn btn-primary btn-sm" v-if="isLoggedIn && !libro.isPrenotato"
+                  v-show="(libro.numCopie > 0)"
                   @click="prenotaCard(libro.idLibro)">PRENOTA</button>
               </div>
               <div class="col-6">
-                <button class="btn btn-warning btn-sm" v-if="isLoggedIn && (libro.numCopie <= 0)"
+                <button class="btn btn-warning btn-sm" v-if="isLoggedIn && !libro.isPrenotato && (libro.numCopie <= 0)"
                   @click="metticodaCard">CODA</button>
               </div>
             </div>
             <div class="row">
               <div class="col-6">
-                <button class="btn btn-primary btn-sm" v-if="isLibr"
-                  @click="addcopieCard(libro.idLibro)">RESTITUISCI</button>
+                <!-- Mostra il pulsante "Restituisci" solo se l'utente è loggato e ha prenotato il libro -->
+                <button class="btn btn-primary btn-sm" v-if="isLoggedIn && libro.isPrenotato"
+                  @click="restituisciCard(libro.idLibro)">RESTITUISCI</button>
               </div>
               <div class="col-6">
-                <button class="btn btn-danger btn-sm" v-if="isLibr" 
+                <button class="btn btn-danger btn-sm" v-if="isLibr"
                   @click="cancellaCard(libro.idLibro)">CANCELLA</button>
               </div>
             </div>
@@ -53,12 +56,26 @@ const libri = ref([]);
 const toast = useToast();
 
 onMounted(async () => {
-  try {
-    const response = await axios.get('http://localhost:3000/api/libri');
-    libri.value = response.data;
-  } catch (error) {
-    console.error('Errore durante il caricamento dei libri:', error);
-    toast.error('Errore durante il caricamento dei libri');
+  if (isLoggedIn.value) { // Verifica se l'utente è loggato
+    try {
+      const idUtente = userStore.user.idUtente;
+      const response = await axios.get('http://localhost:3000/api/libri', {
+        params: { idUtente: idUtente }
+      });
+      libri.value = response.data;
+    } catch (error) {
+      console.error('Errore durante il caricamento dei libri:', error);
+      toast.error('Errore durante il caricamento dei libri');
+    }
+  } else {
+    // Se non loggato, carica solo i libri senza info sulle prenotazioni
+    try {
+      const response = await axios.get('http://localhost:3000/api/libri');
+      libri.value = response.data;
+    } catch (error) {
+      console.error('Errore durante il caricamento dei libri:', error);
+      toast.error('Errore durante il caricamento dei libri');
+    }
   }
 });
 
@@ -74,11 +91,20 @@ const cancellaCard = async (id) => {
 };
 
 const prenotaCard = async (id) => {
+  if (!isLoggedIn.value) {
+    toast.error('Devi essere loggato per prenotare un libro');
+    return;
+  }
+
   try {
     const libro = libri.value.find(libro => libro.idLibro === id);
     if (libro.numCopie > 0) {
-      await axios.patch(`http://localhost:3000/api/libri/prenota/${id}`);
+      const idUtente = userStore.user.idUtente;
+      await axios.patch(`http://localhost:3000/api/libri/prenota/${id}`, {
+        idUtente: idUtente
+      });
       libro.numCopie--;
+      libro.isPrenotato = true; // Aggiorna lo stato locale per riflettere la prenotazione
       toast.success('Libro prenotato con successo');
     } else {
       toast.error('Nessuna copia disponibile per la prenotazione');
@@ -89,15 +115,28 @@ const prenotaCard = async (id) => {
   }
 };
 
-const addcopieCard = async (id) => {
+const restituisciCard = async (id) => {
+  if (!isLoggedIn.value) {
+    toast.error('Devi essere loggato per restituire un libro');
+    return;
+  }
+
   try {
-    await axios.patch(`http://localhost:3000/api/libri/restituisci/${id}`);
+    const idUtente = userStore.user.idUtente;
+    await axios.patch(`http://localhost:3000/api/libri/restituisci/${id}`, {
+      idUtente: idUtente
+    });
     const libro = libri.value.find(libro => libro.idLibro === id);
     libro.numCopie++;
+    libro.isPrenotato = false; // Aggiorna lo stato locale per riflettere la restituzione
     toast.success('Libro restituito con successo');
   } catch (error) {
-    console.error('Errore durante la restituzione del libro:', error);
-    toast.error('Errore durante la restituzione del libro');
+    if (error.response && error.response.status === 400) {
+      toast.error('Nessuna prenotazione trovata per questo libro e utente');
+    } else {
+      console.error('Errore durante la restituzione del libro:', error);
+      toast.error('Errore durante la restituzione del libro');
+    }
   }
 };
 </script>

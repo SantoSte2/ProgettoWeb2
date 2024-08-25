@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import mysql from 'mysql';
+import moment from 'moment';
 
 // Creare l'applicazione Express
 const app = express();
@@ -29,60 +30,175 @@ connection.connect((err) => {
 
 // Endpoint per ottenere i libri
 app.get('/api/libri', (req, res) => {
-  const query = 'SELECT idLibro, Titolo, numCopie, trama, immagine FROM libro';
+  const idUtente = req.query.idUtente;
 
-  connection.query(query, (error, results) => {
+  const sqlLibri = 'SELECT * FROM libro';
+  const sqlPrenotazioni = 'SELECT idLibro FROM prenotazione WHERE idUtente = ?';
+
+  connection.query(sqlLibri, (error, resultsLibri) => {
     if (error) {
-      console.error('Errore durante la query al database:', error);
-      res.status(500).json({ error: 'Errore nella query al database.' });
-      return;
+      return res.status(500).json({ error: 'Errore nel recupero dei libri.' });
     }
 
-    // Invia la risposta JSON
-    res.json(results);
+    connection.query(sqlPrenotazioni, [idUtente], (error, resultsPrenotazioni) => {
+      if (error) {
+        return res.status(500).json({ error: 'Errore nel recupero delle prenotazioni.' });
+      }
+
+      const libriPrenotati = resultsPrenotazioni.map(p => p.idLibro);
+
+      const libri = resultsLibri.map(libro => {
+        return {
+          ...libro,
+          isPrenotato: libriPrenotati.includes(libro.idLibro)
+        };
+      });
+
+      res.json(libri);
+    });
   });
 });
 
-// Endpoint per cancellare un libro
+// Endpoint per cancellare un libro e le sue prenotazioni
 app.delete('/api/libri/:id', (req, res) => {
-    const sql = 'DELETE FROM libro WHERE idLibro = ?';
-    const id = req.params.id;
+  const id = req.params.id;
 
-    connection.query(sql, [id], (error, results) => {
-        if (error) {
-            return res.status(500).json({ error: 'Errore nella query al database.' });
-        }
-        res.json({ message: 'Libro cancellato con successo.' });
-    });
+  // Query per eliminare le prenotazioni associate al libro
+  const sqlDeletePrenotazioni = 'DELETE FROM prenotazione WHERE idLibro = ?';
+  // Query per eliminare il libro
+  const sqlDeleteLibro = 'DELETE FROM libro WHERE idLibro = ?';
+
+  connection.beginTransaction((err) => {
+      if (err) {
+          return res.status(500).json({ error: 'Errore durante l\'avvio della transazione.' });
+      }
+
+      // Prima elimina le prenotazioni associate
+      connection.query(sqlDeletePrenotazioni, [id], (error, results) => {
+          if (error) {
+              return connection.rollback(() => {
+                  res.status(500).json({ error: 'Errore durante la cancellazione delle prenotazioni.' });
+              });
+          }
+
+          // Poi elimina il libro
+          connection.query(sqlDeleteLibro, [id], (error, results) => {
+              if (error) {
+                  return connection.rollback(() => {
+                      res.status(500).json({ error: 'Errore durante la cancellazione del libro.' });
+                  });
+              }
+
+              connection.commit((err) => {
+                  if (err) {
+                      return connection.rollback(() => {
+                          res.status(500).json({ error: 'Errore durante la commit della transazione.' });
+                      });
+                  }
+
+                  res.json({ message: 'Libro e prenotazioni cancellati con successo.' });
+              });
+          });
+      });
+  });
 });
 
 // Endpoint per prenotare un libro
 app.patch('/api/libri/prenota/:id', (req, res) => {
-    const sql = 'UPDATE libro SET numCopie = numCopie - 1 WHERE idLibro = ? AND numCopie > 0';
-    const id = req.params.id;
+  const sqlUpdateLibro = 'UPDATE libro SET numCopie = numCopie - 1 WHERE idLibro = ? AND numCopie > 0';
+  const sqlInsertPrenotazione = 'INSERT INTO prenotazione (idLibro, idUtente, inizioPren, finePren) VALUES (?, ?, ?, ?)';
+  const idLibro = req.params.id;
+  const idUtente = req.body.idUtente;
+  const inizioPrenotazione = moment().format('YYYY-MM-DD');
+  const finePrenotazione = moment().add(30, 'days').format('YYYY-MM-DD');
 
-    connection.query(sql, [id], (error, results) => {
+  connection.beginTransaction((err) => {
+    if (err) {
+      return res.status(500).json({ error: 'Errore durante l\'avvio della transazione.' });
+    }
+
+    connection.query(sqlUpdateLibro, [idLibro], (error, results) => {
+      if (error) {
+        return connection.rollback(() => {
+          res.status(500).json({ error: 'Errore durante la query di aggiornamento del libro.' });
+        });
+      }
+
+      if (results.affectedRows === 0) {
+        return res.status(400).json({ error: 'Non ci sono copie disponibili.' });
+      }
+
+      connection.query(sqlInsertPrenotazione, [idLibro, idUtente, inizioPrenotazione, finePrenotazione], (error, results) => {
         if (error) {
-            return res.status(500).json({ error: 'Errore nella query al database.' });
+          return connection.rollback(() => {
+            res.status(500).json({ error: 'Errore durante l\'inserimento della prenotazione.' });
+          });
         }
-        if (results.affectedRows === 0) {
-            return res.status(400).json({ error: 'Non ci sono copie disponibili.' });
-        }
-        res.json({ message: 'Libro prenotato con successo.' });
+
+        connection.commit((err) => {
+          if (err) {
+            return connection.rollback(() => {
+              res.status(500).json({ error: 'Errore durante la commit della transazione.' });
+            });
+          }
+
+          res.json({ message: 'Libro prenotato con successo e prenotazione registrata.' });
+        });
+      });
     });
+  });
 });
 
 // Endpoint per restituire un libro
 app.patch('/api/libri/restituisci/:id', (req, res) => {
-    const sql = 'UPDATE libro SET numCopie = numCopie + 1 WHERE idLibro = ?';
-    const id = req.params.id;
+  const { idUtente } = req.body;
+  const idLibro = req.params.id;
 
-    connection.query(sql, [id], (error, results) => {
+  const sqlCheckPrenotazione = 'SELECT * FROM prenotazione WHERE idLibro = ? AND idUtente = ?';
+  const sqlDeletePrenotazione = 'DELETE FROM prenotazione WHERE idLibro = ? AND idUtente = ?';
+  const sqlUpdateLibro = 'UPDATE libro SET numCopie = numCopie + 1 WHERE idLibro = ?';
+
+  connection.query(sqlCheckPrenotazione, [idLibro, idUtente], (error, results) => {
+    if (error) {
+      return res.status(500).json({ error: 'Errore nella query al database.' });
+    }
+
+    if (results.length === 0) {
+      return res.status(400).json({ error: 'Nessuna prenotazione trovata per questo libro e utente.' });
+    }
+
+    connection.beginTransaction((err) => {
+      if (err) {
+        return res.status(500).json({ error: 'Errore durante l\'avvio della transazione.' });
+      }
+
+      connection.query(sqlDeletePrenotazione, [idLibro, idUtente], (error, results) => {
         if (error) {
-            return res.status(500).json({ error: 'Errore nella query al database.' });
+          return connection.rollback(() => {
+            res.status(500).json({ error: 'Errore durante la cancellazione della prenotazione.' });
+          });
         }
-        res.json({ message: 'Libro restituito con successo.' });
+
+        connection.query(sqlUpdateLibro, [idLibro], (error, results) => {
+          if (error) {
+            return connection.rollback(() => {
+              res.status(500).json({ error: 'Errore durante l\'aggiornamento del libro.' });
+            });
+          }
+
+          connection.commit((err) => {
+            if (err) {
+              return connection.rollback(() => {
+                res.status(500).json({ error: 'Errore durante la commit della transazione.' });
+              });
+            }
+
+            res.json({ message: 'Libro restituito con successo.' });
+          });
+        });
+      });
     });
+  });
 });
 
 app.post('/api/libri/aggiungi', (req, res) => {
