@@ -65,52 +65,66 @@ app.delete('/api/libri/:id', (req, res) => {
 
   // Query per eliminare le prenotazioni associate al libro
   const sqlDeletePrenotazioni = 'DELETE FROM prenotazione WHERE idLibro = ?';
+  // Query per eliminare le code associate al libro
+  const sqlDeleteCode = 'DELETE FROM coda WHERE idLibro = ?';
   // Query per eliminare il libro
   const sqlDeleteLibro = 'DELETE FROM libro WHERE idLibro = ?';
 
   connection.beginTransaction((err) => {
-      if (err) {
-          return res.status(500).json({ error: 'Errore durante l\'avvio della transazione.' });
+    if (err) {
+      return res.status(500).json({ error: 'Errore durante l\'avvio della transazione.' });
+    }
+
+    // Prima elimina le prenotazioni associate
+    connection.query(sqlDeleteCode, [id], (error) => {
+      if (error) {
+        return connection.rollback(() => {
+          res.status(500).json({ error: 'Errore durante la cancellazione delle code.' });
+        });
       }
 
-      // Prima elimina le prenotazioni associate
-      connection.query(sqlDeletePrenotazioni, [id], (error, results) => {
+      // Poi elimina le code associate
+      connection.query(sqlDeletePrenotazioni, [id], (error) => {
+        if (error) {
+          return connection.rollback(() => {
+            res.status(500).json({ error: 'Errore durante la cancellazione delle prenotazioni.' });
+          });
+        }
+
+        // Infine elimina il libro
+        connection.query(sqlDeleteLibro, [id], (error) => {
           if (error) {
-              return connection.rollback(() => {
-                  res.status(500).json({ error: 'Errore durante la cancellazione delle prenotazioni.' });
-              });
+            return connection.rollback(() => {
+              res.status(500).json({ error: 'Errore durante la cancellazione del libro.' });
+            });
           }
 
-          // Poi elimina il libro
-          connection.query(sqlDeleteLibro, [id], (error, results) => {
-              if (error) {
-                  return connection.rollback(() => {
-                      res.status(500).json({ error: 'Errore durante la cancellazione del libro.' });
-                  });
-              }
-
-              connection.commit((err) => {
-                  if (err) {
-                      return connection.rollback(() => {
-                          res.status(500).json({ error: 'Errore durante la commit della transazione.' });
-                      });
-                  }
-
-                  res.json({ message: 'Libro e prenotazioni cancellati con successo.' });
+          connection.commit((err) => {
+            if (err) {
+              return connection.rollback(() => {
+                res.status(500).json({ error: 'Errore durante la commit della transazione.' });
               });
+            }
+
+            res.json({ message: 'Libro, prenotazioni e code cancellati con successo.' });
           });
+        });
       });
+    });
   });
 });
+
 
 // Endpoint per prenotare un libro
 app.patch('/api/libri/prenota/:id', (req, res) => {
   const sqlUpdateLibro = 'UPDATE libro SET numCopie = numCopie - 1 WHERE idLibro = ? AND numCopie > 0';
   const sqlInsertPrenotazione = 'INSERT INTO prenotazione (idLibro, idUtente, inizioPren, finePren) VALUES (?, ?, ?, ?)';
+  const sqlAddToQueue = 'INSERT INTO coda (idLibro, idUtente, dataInserimento) VALUES (?, ?, ?)';
   const idLibro = req.params.id;
   const idUtente = req.body.idUtente;
   const inizioPrenotazione = moment().format('YYYY-MM-DD');
   const finePrenotazione = moment().add(30, 'days').format('YYYY-MM-DD');
+  const dataInserimento = moment().format('YYYY-MM-DD HH:mm:ss');
 
   connection.beginTransaction((err) => {
     if (err) {
@@ -120,31 +134,49 @@ app.patch('/api/libri/prenota/:id', (req, res) => {
     connection.query(sqlUpdateLibro, [idLibro], (error, results) => {
       if (error) {
         return connection.rollback(() => {
-          res.status(500).json({ error: 'Errore durante la query di aggiornamento del libro.' });
+          res.status(500).json({ error: 'Errore durante l\'aggiornamento del libro.' });
         });
       }
 
       if (results.affectedRows === 0) {
-        return res.status(400).json({ error: 'Non ci sono copie disponibili.' });
-      }
-
-      connection.query(sqlInsertPrenotazione, [idLibro, idUtente, inizioPrenotazione, finePrenotazione], (error, results) => {
-        if (error) {
-          return connection.rollback(() => {
-            res.status(500).json({ error: 'Errore durante l\'inserimento della prenotazione.' });
-          });
-        }
-
-        connection.commit((err) => {
-          if (err) {
+        // Se non ci sono copie disponibili, aggiungi alla coda
+        connection.query(sqlAddToQueue, [idLibro, idUtente, dataInserimento], (error) => {
+          if (error) {
             return connection.rollback(() => {
-              res.status(500).json({ error: 'Errore durante la commit della transazione.' });
+              res.status(500).json({ error: 'Errore durante l\'inserimento nella coda.' });
             });
           }
 
-          res.json({ message: 'Libro prenotato con successo e prenotazione registrata.' });
+          connection.commit((err) => {
+            if (err) {
+              return connection.rollback(() => {
+                res.status(500).json({ error: 'Errore durante la commit della transazione.' });
+              });
+            }
+
+            res.json({ message: 'Libro aggiunto alla coda con successo.' });
+          });
         });
-      });
+      } else {
+        // Se ci sono copie disponibili, prenota il libro
+        connection.query(sqlInsertPrenotazione, [idLibro, idUtente, inizioPrenotazione, finePrenotazione], (error) => {
+          if (error) {
+            return connection.rollback(() => {
+              res.status(500).json({ error: 'Errore durante l\'inserimento della prenotazione.' });
+            });
+          }
+
+          connection.commit((err) => {
+            if (err) {
+              return connection.rollback(() => {
+                res.status(500).json({ error: 'Errore durante la commit della transazione.' });
+              });
+            }
+
+            res.json({ message: 'Libro prenotato con successo.' });
+          });
+        });
+      }
     });
   });
 });
@@ -157,6 +189,9 @@ app.patch('/api/libri/restituisci/:id', (req, res) => {
   const sqlCheckPrenotazione = 'SELECT * FROM prenotazione WHERE idLibro = ? AND idUtente = ?';
   const sqlDeletePrenotazione = 'DELETE FROM prenotazione WHERE idLibro = ? AND idUtente = ?';
   const sqlUpdateLibro = 'UPDATE libro SET numCopie = numCopie + 1 WHERE idLibro = ?';
+  const sqlGetQueue = 'SELECT idUtente FROM coda WHERE idLibro = ? ORDER BY dataInserimento LIMIT 1';
+  const sqlAssignToQueue = 'INSERT INTO prenotazione (idLibro, idUtente, inizioPren, finePren) VALUES (?, ?, ?, ?)';
+  const sqlDeleteQueue = 'DELETE FROM coda WHERE idLibro = ? AND idUtente = ?';
 
   connection.query(sqlCheckPrenotazione, [idLibro, idUtente], (error, results) => {
     if (error) {
@@ -172,29 +207,70 @@ app.patch('/api/libri/restituisci/:id', (req, res) => {
         return res.status(500).json({ error: 'Errore durante l\'avvio della transazione.' });
       }
 
-      connection.query(sqlDeletePrenotazione, [idLibro, idUtente], (error, results) => {
+      connection.query(sqlDeletePrenotazione, [idLibro, idUtente], (error) => {
         if (error) {
           return connection.rollback(() => {
             res.status(500).json({ error: 'Errore durante la cancellazione della prenotazione.' });
           });
         }
 
-        connection.query(sqlUpdateLibro, [idLibro], (error, results) => {
+        connection.query(sqlGetQueue, [idLibro], (error, results) => {
           if (error) {
             return connection.rollback(() => {
-              res.status(500).json({ error: 'Errore durante l\'aggiornamento del libro.' });
+              res.status(500).json({ error: 'Errore durante la query della coda.' });
             });
           }
 
-          connection.commit((err) => {
-            if (err) {
-              return connection.rollback(() => {
-                res.status(500).json({ error: 'Errore durante la commit della transazione.' });
-              });
-            }
+          if (results.length > 0) {
+            const nextInQueue = results[0].idUtente;
+            const inizioPrenotazione = moment().format('YYYY-MM-DD');
+            const finePrenotazione = moment().add(30, 'days').format('YYYY-MM-DD');
 
-            res.json({ message: 'Libro restituito con successo.' });
-          });
+            connection.query(sqlAssignToQueue, [idLibro, nextInQueue, inizioPrenotazione, finePrenotazione], (error) => {
+              if (error) {
+                return connection.rollback(() => {
+                  res.status(500).json({ error: 'Errore durante l\'assegnazione del libro dalla coda.' });
+                });
+              }
+
+              connection.query(sqlDeleteQueue, [idLibro, nextInQueue], (error) => {
+                if (error) {
+                  return connection.rollback(() => {
+                    res.status(500).json({ error: 'Errore durante la cancellazione dalla coda.' });
+                  });
+                }
+
+                connection.commit((err) => {
+                  if (err) {
+                    return connection.rollback(() => {
+                      res.status(500).json({ error: 'Errore durante la commit della transazione.' });
+                    });
+                  }
+
+                  res.json({ message: 'Libro restituito e assegnato al prossimo utente in coda.' });
+                });
+              });
+            });
+          } else {
+            // Nessun utente in coda, incrementa il numero delle copie disponibili
+            connection.query(sqlUpdateLibro, [idLibro], (error) => {
+              if (error) {
+                return connection.rollback(() => {
+                  res.status(500).json({ error: 'Errore durante l\'aggiornamento del libro.' });
+                });
+              }
+
+              connection.commit((err) => {
+                if (err) {
+                  return connection.rollback(() => {
+                    res.status(500).json({ error: 'Errore durante la commit della transazione.' });
+                  });
+                }
+
+                res.json({ message: 'Libro restituito con successo.' });
+              });
+            });
+          }
         });
       });
     });

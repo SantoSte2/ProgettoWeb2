@@ -25,14 +25,14 @@
                     placeholder="Inserisci l'Url della copertina">
             </div>
             <div class="mb-3">
-                <label for="exampleFormControlTextarea1" class="form-label">Breve Intro</label>
+                <label for="exampleFormControlTextarea1" class="form-label">Trama</label>
                 <textarea class="form-control" id="Descrizione" v-model="descrizione"
                     placeholder="Inserisci una breve descrizone" rows="3"></textarea>
             </div>
             <div class="row">
                 <div class="col-10"></div>
                 <div class="col-2">
-                    <button class="btn btn-primary" type="submit">Inserisci valori</button>
+                    <button class="btn btn-primary" type="submit">Invia</button>
                 </div>
 
             </div>

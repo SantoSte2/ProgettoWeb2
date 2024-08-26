@@ -13,13 +13,12 @@
             <div class="row">
               <div class="col-6">
                 <!-- Mostra il pulsante "Prenota" solo se l'utente è loggato e non ha prenotato il libro -->
-                <button class="btn btn-primary btn-sm" v-if="isLoggedIn && !libro.isPrenotato"
-                  v-show="(libro.numCopie > 0)"
+                <button class="btn btn-primary btn-sm" v-if="isLoggedIn && !libro.isPrenotato && (libro.numCopie > 0)"
                   @click="prenotaCard(libro.idLibro)">PRENOTA</button>
               </div>
               <div class="col-6">
                 <button class="btn btn-warning btn-sm" v-if="isLoggedIn && !libro.isPrenotato && (libro.numCopie <= 0)"
-                  @click="metticodaCard">CODA</button>
+                  @click="metticodaCard(libro.idLibro)">CODA</button>
               </div>
             </div>
             <div class="row">
@@ -115,6 +114,29 @@ const prenotaCard = async (id) => {
   }
 };
 
+const metticodaCard = async (id) => {
+  if (!isLoggedIn.value) {
+    toast.error('Devi essere loggato per metterti in coda per un libro');
+    return;
+  }
+
+  try {
+    const libro = libri.value.find(libro => libro.idLibro === id);
+    const idUtente = userStore.user.idUtente;
+
+    await axios.patch(`http://localhost:3000/api/libri/prenota/${id}`, {
+      idUtente: idUtente,
+      inCoda: true
+    });
+
+    libro.isPrenotato = false; // Aggiorna lo stato locale se necessario
+    toast.success('Sei stato aggiunto alla coda per questo libro');
+  } catch (error) {
+    console.error('Errore durante l\'aggiunta alla coda del libro:', error);
+    toast.error('Errore durante l\'aggiunta alla coda del libro');
+  }
+};
+
 const restituisciCard = async (id) => {
   if (!isLoggedIn.value) {
     toast.error('Devi essere loggato per restituire un libro');
@@ -123,13 +145,22 @@ const restituisciCard = async (id) => {
 
   try {
     const idUtente = userStore.user.idUtente;
-    await axios.patch(`http://localhost:3000/api/libri/restituisci/${id}`, {
+    const response = await axios.patch(`http://localhost:3000/api/libri/restituisci/${id}`, {
       idUtente: idUtente
     });
+
     const libro = libri.value.find(libro => libro.idLibro === id);
-    libro.numCopie++;
-    libro.isPrenotato = false; // Aggiorna lo stato locale per riflettere la restituzione
-    toast.success('Libro restituito con successo');
+
+    if (response.data.message.includes('assegnato al prossimo utente in coda')) {
+      // Se il libro è stato assegnato a un utente in coda, non incrementare numCopie
+      libro.isPrenotato = false;
+    } else {
+      // Se il libro non è stato assegnato a nessuno in coda, incrementa numCopie
+      libro.numCopie++;
+      libro.isPrenotato = false; // Aggiorna lo stato locale per riflettere la restituzione
+    }
+
+    toast.success(response.data.message);
   } catch (error) {
     if (error.response && error.response.status === 400) {
       toast.error('Nessuna prenotazione trovata per questo libro e utente');
