@@ -59,6 +59,54 @@ app.get('/api/libri', (req, res) => {
   });
 });
 
+app.get('/api/libri/:id', (req, res) => {
+  const id = req.params.id;
+
+  const query = 'SELECT * FROM libro WHERE idLibro = ?';
+  connection.query(query, [id], (error, results) => {
+      if (error) {
+          console.error('Errore durante la query:', error);
+          res.status(500).json({ error: 'Errore nella query al database.' });
+          return;
+      }
+
+      if (results.length === 0) {
+          res.status(404).json({ message: 'Libro non trovato' });
+      } else {
+          res.json(results[0]);
+      }
+  });
+});
+
+app.put('/api/libri/:id', (req, res) => {
+  const id = req.params.id;
+  const { Titolo, Autore, numCopie, trama, immagine } = req.body;
+
+  const query = `
+    UPDATE libro
+    SET Titolo = COALESCE(?, Titolo),
+        Autore = COALESCE(?, Autore),
+        numCopie = COALESCE(?, numCopie),
+        trama = COALESCE(?, trama),
+        immagine = COALESCE(?, immagine)
+    WHERE idLibro = ?
+  `;
+
+  connection.query(query, [Titolo, Autore, numCopie, trama, immagine, id], (error, results) => {
+    if (error) {
+      console.error('Errore durante l\'aggiornamento del libro:', error);
+      res.status(500).json({ error: 'Errore durante l\'aggiornamento del libro' });
+      return;
+    }
+
+    if (results.affectedRows === 0) {
+      res.status(404).json({ message: 'Libro non trovato' });
+    } else {
+      res.json({ message: 'Libro aggiornato con successo' });
+    }
+  });
+});
+
 // Endpoint per cancellare un libro e le sue prenotazioni
 app.delete('/api/libri/:id', (req, res) => {
   const id = req.params.id;
@@ -331,6 +379,27 @@ app.post('/api/login', (req, res) => {
       }
     });
   });
+
+  app.post('/api/utenti/registrazione', (req, res) => {
+    const { email, password } = req.body;
+
+    const query = `
+        INSERT INTO utente (username, password)
+        VALUES (?, ?)
+    `;
+
+    const values = [email, password];
+
+    connection.query(query, values, (error, results) => {
+        if (error) {
+            console.error('Errore durante l\'inserimento nel database:', error);
+            res.status(500).json({ success: false, error: 'Errore nella query al database.' });
+            return;
+        }
+
+        res.status(201).json({ success: true, message: 'Utente registrato con successo!', id: results.insertId });
+    });
+});
   
 
 // Avvio del server
