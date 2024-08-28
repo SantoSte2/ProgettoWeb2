@@ -401,6 +401,39 @@ app.post('/api/login', (req, res) => {
     });
 });
   
+// Endpoint per ricevere tutte le prenotazioni
+app.get('/api/prenotazioni', (req, res) => {
+  // Ottieni l'ID utente dalla query string
+  const userId = req.query.userId;
+
+  // Costruisci la query SQL con join per ottenere username e titolo del libro
+  let sql = `
+    SELECT
+      prenotazione.idLibro,
+      libro.Titolo,
+      prenotazione.idUtente,
+      utente.username AS username,
+      prenotazione.inizioPren,
+      prenotazione.finePren
+    FROM prenotazione
+    JOIN libro ON prenotazione.idLibro = libro.idLibro
+    JOIN utente ON prenotazione.idUtente = utente.idUtente
+  `;
+
+  // Aggiungi il filtro per l'ID utente se è presente
+  if (userId) {
+    sql += ' WHERE prenotazione.idUtente = ?';
+  }
+
+  connection.query(sql, userId ? [userId] : [], (error, results) => {
+    if (error) {
+      console.error('Errore durante il recupero delle prenotazioni:', error);
+      return res.status(500).json({ error: 'Errore nel recupero delle prenotazioni.' });
+    }
+
+    res.json(results);
+  });
+});
 
 // Avvio del server
 const PORT = process.env.PORT || 3000;
