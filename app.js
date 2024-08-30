@@ -25,6 +25,7 @@ connection.connect(error => {
   }
 });
 
+
 // Routes
 app.get('/api/records', (req, res) => {
   const sql = 'SELECT * FROM libro';
@@ -37,6 +38,22 @@ app.get('/api/records', (req, res) => {
     }
   });
 });
+
+//app.post('/prenotaCard', (req, res) => {
+  // const { id } = req.body;
+  // const sql = 'UPDATE libro SET idCard = ? WHERE idLibro = ?';
+  // connection.query(sql, [card, id], (error, results) => {
+  //   if (error) {
+  //     console.error('Errore nell\'aggiornamento:', error);
+  //     res.status(500).json({ error: 'Errore nell\'aggiornamento dei dati.' });
+  //   } else {
+  //     res.json({ message: 'Record aggiornato con successo.' });
+  //   }
+  // });
+
+  //res.json({ message: 'Record aggiornato con successo.' });
+
+//});
 
 app.post('/api/records', (req, res) => {
   const { title, copies } = req.body;
