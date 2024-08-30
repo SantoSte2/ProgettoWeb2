@@ -1,118 +1,67 @@
 <template>
-
-  <!-- <AddLibro @libroSubmitted="handleLibroSubmitted" /> -->
+  <!-- Componente per aggiungere una nuova card -->
   <AddCard @cardSubmitted="handleCardSubmitted" />
-  <Footer />
 
+  <!-- Componente per modificare un libro esistente -->
+  <ModificaLibro @libroModificato="aggiornaListaLibri" :libri="cardLibri" />
+
+  <!-- Footer -->
+  <Footer />
 </template>
 
 <script setup>
-
-//import AddLibro from '../components/AddLibro.vue';
 import AddCard from '../components/AddCard.vue';
+import ModificaLibro from '../components/ModificaLibro.vue';
 import Footer from '@/components/Footer.vue';
-
-
-import { ref, computed, onMounted } from 'vue';
-import { generateCodeFrame } from 'vue/compiler-sfc';
-
-//importare il TOAST per la visualizzazione delle notifiche carine, e poi chiamarlo toast per semplicita
+import { ref, onMounted } from 'vue';
 import { useToast } from 'vue-toastification';
+
 const toast = useToast();
-
-
-//const listaLibri = ref([]);
-
 const cardLibri = ref([]);
 
-/*
-//Add Libro----------------------------OBSOLETA
-// con questa funzione manca un ID per inserire il libro o l'oggetto quindi creo la funzione di creazione random ID
-const handleLibroSubmitted = (libroData) => {
-  //metto dentro il mio array listaLibri pushando dentro valori nuovi che prendo da AddLibri il componente
-  listaLibri.value.push({
-    id: generaId(),
-    titoloLibro: libroData.titoloLibro,
-    copieLibro: libroData.copieLibro,
-  });
-  //console.log(generaId());
-
-  //prima di mandare il toast salvo in memoria con la funzione di salvataggio del nuovo libro
-  listaLibriDaSalvare();
-
-  //usiamo la notifica carina toast per dire Libro aggiunto
-  toast.success('Libro aggiunto con successo');
-
-};
-*/
-
-//Add Card----------------------------------
-
+// Funzione per gestire l'aggiunta di una nuova card
 const handleCardSubmitted = (cardData) => {
-
   cardLibri.value.push({
     id: generaId(),
     titoloCard: cardData.titoloCard,
     autoreCard: cardData.autoreCard,
     copieCard: cardData.copieCard,
     descrizione: cardData.descrizione,
-    imgurl: cardData.imgurl
+    imgurl: cardData.imgurl,
   });
 
   listacardDaSalvare();
 
   toast.success('Card Aggiunta');
-
 };
 
-//Generare id Unico-----------------------------
-
+// Funzione per generare un ID unico
 const generaId = () => {
-
   return Math.floor(Math.random() * 1000000);
 };
 
+// Funzione per salvare le card in locale
+const listacardDaSalvare = () => {
+  localStorage.setItem('cardLibri', JSON.stringify(cardLibri.value));
+};
 
+// Funzione per aggiornare la lista dei libri dopo una modifica
+const aggiornaListaLibri = (libroModificato) => {
+  const indice = cardLibri.value.findIndex(libro => libro.id === libroModificato.id);
 
-// Funzione Memoria Locale------------------------------------
-onMounted(() => {
-  /*
-  // nello storage locale posso salvare solo JSON quindi faccio il parse
-  const savedlistaLibri = JSON.parse(localStorage.getItem('listaLibri'));//OBSOLETA
-
-  if (savedlistaLibri) {// se esistono libri salvati allora ricarico quei libri nel web
-
-    listaLibri.value = savedlistaLibri;
+  if (indice !== -1) {
+    cardLibri.value[indice] = libroModificato;
+    listacardDaSalvare();
+    toast.success('Libro modificato con successo');
   }
+};
 
-  */
-  // card libri da salvare-------------------------------------------
-
+// Funzione per caricare le card salvate in locale al montaggio del componente
+onMounted(() => {
   const savedcardLibri = JSON.parse(localStorage.getItem('cardLibri'));
 
   if (savedcardLibri) {
-
     cardLibri.value = savedcardLibri;
   }
-
 });
-
-//Salva listaLibri--------------------------------------
-/*
-// una volta creata la funzione di utilizzo della memoria interna piu sopra craiamo il salvataggio della listaLibri e la richiamiamo ogni volta che cancelliamo o aggiungiamo un libro
-const listaLibriDaSalvare = () => {
-  //lo storage locale salva solo le stringhe quindi uso stringify per rendere tutto stringhe
-  localStorage.setItem('listaLibri', JSON.stringify(listaLibri.value));//OBSOLETA
-
-};
-*/
-//Salva cardLibri--------------------------------------
-const listacardDaSalvare = () => {
-
-  localStorage.setItem('cardLibri', JSON.stringify(cardLibri.value));
-
-};
-
-
-
 </script>

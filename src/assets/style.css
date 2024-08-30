@@ -4,6 +4,14 @@ ul{
     
 }
 
+.card-text {
+    display: -webkit-box;          /* Fai sì che l'elemento utilizzi una visualizzazione a "box" */
+    -webkit-box-orient: vertical;  /* Specifica che il box è orientato verticalmente */
+    overflow: hidden;              /* Nasconde il testo che eccede il limite */
+    text-overflow: ellipsis;       /* Aggiunge i tre puntini "..." alla fine del testo tagliato */
+    -webkit-line-clamp: 5; 
+}
+
 .card-img-top{
     margin-top: 10px;
     width:100%
