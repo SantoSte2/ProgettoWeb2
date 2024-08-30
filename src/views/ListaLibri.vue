@@ -27,6 +27,8 @@ import { generateCodeFrame } from 'vue/compiler-sfc';
 import { useToast } from 'vue-toastification';
 const toast = useToast();
 
+//importare axios per le chiamate http
+const axios = require('axios');
 
 const listaLibri = ref([]);
 
@@ -134,6 +136,7 @@ const handleCardPrenotata = (id) => {
     (card) => card.id === id
 
   );
+
 
   card.copieCard--;
 
