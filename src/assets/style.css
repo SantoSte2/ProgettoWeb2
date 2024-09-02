@@ -1,26 +1,31 @@
-ul{
-    background-color:aquamarine;
+ul {
+    background-color: aquamarine;
     border-bottom: solid 1px black;
-    
+
 }
 
 .card-text {
-    display: -webkit-box;          /* Fai sì che l'elemento utilizzi una visualizzazione a "box" */
-    -webkit-box-orient: vertical;  /* Specifica che il box è orientato verticalmente */
-    overflow: hidden;              /* Nasconde il testo che eccede il limite */
-    text-overflow: ellipsis;       /* Aggiunge i tre puntini "..." alla fine del testo tagliato */
-    -webkit-line-clamp: 5; 
+    display: -webkit-box;
+    /* Fai sì che l'elemento utilizzi una visualizzazione a "box" */
+    -webkit-box-orient: vertical;
+    /* Specifica che il box è orientato verticalmente */
+    overflow: hidden;
+    /* Nasconde il testo che eccede il limite */
+    text-overflow: ellipsis;
+    /* Aggiunge i tre puntini "..." alla fine del testo tagliato */
+    -webkit-line-clamp: 5;
 }
 
-.card-img-top{
+.card-img-top {
     margin-top: 10px;
-    width:100%
+    width: 100%
 }
 
-.plus{
+.plus {
     align-items: start;
 }
-.btn-primary{
+
+.btn-primary {
 
     text-align: center;
     padding: 5px;
@@ -29,15 +34,27 @@ ul{
     margin-bottom: 10px;
 }
 
-.btn-warning{
+.btn-primaryred {
 
+    text-align: center;
     padding: 5px;
-    margin: 3%;
+    margin: 1%;
+    margin-left: 5%;
+    margin-bottom: 10px;
+    background-color: red;
+    text-decoration-color: white;
 
 }
 
-.navbar{
+.btn-warning {
+
+    text-align: center;
+    padding: 5px;
+    margin: 1%;
+
+}
+
+.navbar {
 
     align-items: start;
 }
-

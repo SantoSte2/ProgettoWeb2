@@ -9,30 +9,25 @@
             <h5>Copie Disponibili: {{ libro.numCopie }}</h5>
             <p class="card-text">{{ libro.trama }}</p>
           </div>
-          <div class="container-fluid">
-            <div class="row">
-              <div class="col-6">
-                <!-- Mostra il pulsante "Prenota" solo se l'utente è loggato e non ha prenotato il libro -->
-                <button class="btn btn-primary btn-sm" v-if="isLoggedIn && !libro.isPrenotato && (libro.numCopie > 0)"
-                  @click="prenotaCard(libro.idLibro)">PRENOTA</button>
-              </div>
-              <div class="col-6">
-                <button class="btn btn-warning btn-sm" v-if="isLoggedIn && !libro.isPrenotato && (libro.numCopie <= 0)"
-                  @click="metticodaCard(libro.idLibro)">CODA</button>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6">
-                <!-- Mostra il pulsante "Restituisci" solo se l'utente è loggato e ha prenotato il libro -->
-                <button class="btn btn-primary btn-sm" v-if="isLoggedIn && libro.isPrenotato"
-                  @click="restituisciCard(libro.idLibro)">RESTITUISCI</button>
-              </div>
-              <div class="col-6">
-                <button class="btn btn-danger btn-sm" v-if="isLibr"
-                  @click="cancellaCard(libro.idLibro)">CANCELLA</button>
-              </div>
+          <div class="container">
+            <div class="btn-group btn-group-sm" role="group">
+              <button type="button" class="btn btn-primary"
+                v-if="isLoggedIn && !libro.isPrenotato && (libro.numCopie > 0)"
+                @click="prenotaCard(libro.idLibro)">PRENOTA</button>
+              <button type="button" class="btn btn-warning"
+                v-if="isLoggedIn && !libro.isPrenotato && (libro.numCopie <= 0)"
+                @click="metticodaCard(libro.idLibro)">CODA</button>
+              <!-- Mostra il pulsante "Restituisci" solo se l'utente è loggato e ha prenotato il libro -->
+              <button type="button" class="btn btn-primary" v-if="isLoggedIn && libro.isPrenotato"
+                @click="restituisciCard(libro.idLibro)">RESTITUISCI</button>
+              <button type="button" class="btn btn-primaryred btn-sm" v-if="isLibr"
+                @click="cancellaCard(libro.idLibro)">CANCELLA</button>
             </div>
           </div>
+
+          <!---->
+
+          <!---->
         </div>
       </div>
       <div v-else>
