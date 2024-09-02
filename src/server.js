@@ -418,6 +418,7 @@ app.get('/api/prenotazioni', (req, res) => {
     FROM prenotazione
     JOIN libro ON prenotazione.idLibro = libro.idLibro
     JOIN utente ON prenotazione.idUtente = utente.idUtente
+    ORDER BY prenotazione.inizioPren
   `;
 
   // Aggiungi il filtro per l'ID utente se è presente
@@ -432,6 +433,61 @@ app.get('/api/prenotazioni', (req, res) => {
     }
 
     res.json(results);
+  });
+});
+
+app.get('/api/code', (req, res) => {
+  // Ottieni l'ID utente dalla query string
+  const userId = req.query.userId;
+
+  // Costruisci la query SQL con join per ottenere username e titolo del libro
+  let sql = `
+    SELECT
+      coda.idLibro,
+      libro.Titolo,
+      coda.idUtente,
+      utente.username AS username,
+      coda.dataInserimento
+    FROM coda
+    JOIN libro ON coda.idLibro = libro.idLibro
+    JOIN utente ON coda.idUtente = utente.idUtente
+    ORDER BY coda.dataInserimento
+  `;
+
+  // Aggiungi il filtro per l'ID utente se è presente
+  if (userId) {
+    sql += ' WHERE coda.idUtente = ?';
+  }
+
+  connection.query(sql, userId ? [userId] : [], (error, results) => {
+    if (error) {
+      console.error('Errore durante il recupero delle code:', error);
+      return res.status(500).json({ error: 'Errore nel recupero delle code.' });
+    }
+
+    res.json(results);
+  });
+});
+
+app.delete('/api/code/:idLibro', (req, res) => {
+  const idLibro = req.params.idLibro;
+  const { idUtente } = req.body;
+
+  // SQL per rimuovere l'utente dalla coda
+  const sqlDeleteFromQueue = 'DELETE FROM coda WHERE idLibro = ? AND idUtente = ?';
+
+  // Esecuzione della query
+  connection.query(sqlDeleteFromQueue, [idLibro, idUtente], (error, results) => {
+    if (error) {
+      console.error('Errore durante la rimozione dalla coda:', error);
+      return res.status(500).json({ error: 'Errore durante la rimozione dalla coda.' });
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ message: 'Utente o libro non trovato nella coda.' });
+    }
+
+    res.json({ message: 'Utente rimosso dalla coda con successo.' });
   });
 });
 
