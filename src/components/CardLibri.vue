@@ -1,8 +1,8 @@
 <template>
-  <div class="col-12">
+  <div class="col-12"><!--col-12/container-lg-->
     <div class="card-group mx-4 my-2">
       <div class="row" v-if="libri.length > 0">
-        <div class="card col-4" v-for="libro in libri" :key="libro.idLibro">
+        <div class="card col-md-4" v-for="libro in libri" :key="libro.idLibro"><!--col-4/card-md-->
           <img :src="libro.immagine" class="card-img-top" :alt="'copertina ' + libro.Titolo">
           <div class="card-body">
             <h5 class="card-title">{{ libro.Titolo }}</h5>

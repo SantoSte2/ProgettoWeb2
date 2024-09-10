@@ -59,6 +59,19 @@ ul {
 
 }
 
+.btn-primarysecond {
+
+    text-align: center;
+    padding: 5px;
+    margin: 1%;
+    margin-left: 5%;
+    margin-bottom: 10px;
+    background-color: #6c757d;
+    /*colore del testo del pulsante*/
+    color: white;
+
+}
+
 .navbar {
 
     align-items: start;

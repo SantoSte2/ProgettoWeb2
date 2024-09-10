@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-4 my-2 px-2 py-3 border">
+  <div class="container-md mx-1.5 border"><!--mx-4 my-2 px-2 py-3/container-md-->
     <!-- Se l'utente è loggato, mostra il pulsante di logout, altrimenti mostra il modulo di login/registrazione -->
     <div v-if="isLoggedIn">
       <p>Benvenuto, {{ username }}!</p>
@@ -12,19 +12,22 @@
           <div class="container mb-3">
             <div class="form-group">
               <label for="registerEmail">Email</label>
-              <input type="email" class="form-control" id="registerEmail" v-model="registerEmail" placeholder="Inserire email" required>
+              <input type="email" class="form-control" id="registerEmail" v-model="registerEmail"
+                placeholder="Inserire email" required>
             </div>
           </div>
           <div class="container mb-3">
             <div class="form-group">
               <label for="registerPassword">Password</label>
-              <input type="password" class="form-control" id="registerPassword" v-model="registerPassword" placeholder="Password" required>
+              <input type="password" class="form-control" id="registerPassword" v-model="registerPassword"
+                placeholder="Password" required>
             </div>
           </div>
           <div class="container mb-3">
             <div class="form-group">
               <label for="registerConfirmPassword">Conferma Password</label>
-              <input type="password" class="form-control" id="registerConfirmPassword" v-model="registerConfirmPassword" placeholder="Conferma Password" required>
+              <input type="password" class="form-control" id="registerConfirmPassword" v-model="registerConfirmPassword"
+                placeholder="Conferma Password" required>
             </div>
           </div>
           <div class="container mt-2 text-end">
@@ -39,18 +42,20 @@
           <div class="container mb-3">
             <div class="form-group">
               <label for="loginEmail">Email</label>
-              <input type="email" class="form-control" id="loginEmail" v-model="email" placeholder="Inserire email" required>
+              <input type="email" class="form-control" id="loginEmail" v-model="email" placeholder="Inserire email"
+                required>
             </div>
           </div>
           <div class="container mb-3">
             <div class="form-group">
               <label for="loginPassword">Password</label>
-              <input type="password" class="form-control" id="loginPassword" v-model="password" placeholder="Password" required>
+              <input type="password" class="form-control" id="loginPassword" v-model="password" placeholder="Password"
+                required>
             </div>
           </div>
           <div class="container mt-2 text-end">
-            <button type="submit" class="btn btn-primary">Login</button>
-            <button type="button" class="btn btn-secondary ms-2" @click="toggleForm">Vai a Registra</button>
+            <button type="submit" class="btn btn-primary btn-sm">Login</button>
+            <button type="button" class="btn btn-primarysecond btn-sm" @click="toggleForm">Vai a Registra</button>
           </div>
         </form>
       </div>
