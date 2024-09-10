@@ -14,7 +14,7 @@
               <button type="button" class="btn btn-primary"
                 v-if="isLoggedIn && !libro.isPrenotato && (libro.numCopie > 0)"
                 @click="prenotaCard(libro.idLibro)">PRENOTA</button>
-              <button type="button" class="btn btn-warning"
+              <button type="button" class="btn btn-primarywarning"
                 v-if="isLoggedIn && !libro.isPrenotato && (libro.numCopie <= 0)"
                 @click="metticodaCard(libro.idLibro)">CODA</button>
               <!-- Mostra il pulsante "Restituisci" solo se l'utente è loggato e ha prenotato il libro -->

@@ -42,15 +42,20 @@ ul {
     margin-left: 5%;
     margin-bottom: 10px;
     background-color: red;
-    text-decoration-color: white;
+    color: white;
 
 }
 
-.btn-warning {
+.btn-primarywarning {
 
     text-align: center;
     padding: 5px;
     margin: 1%;
+    margin-left: 5%;
+    margin-bottom: 10px;
+    background-color: #ffca2c;
+    /*colore del testo del pulsante*/
+    color: black;
 
 }
 
