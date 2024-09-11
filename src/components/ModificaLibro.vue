@@ -1,9 +1,10 @@
 <template>
-    <div class="container mx-4 my-2 px-2 py-4 border">
-      <h3>Modifica Libro</h3>
-  
+    <div class="container-md mx-1.5 border"><!--container mx-4 my-2 px-2 py-4 border-->
+      <div class="text-start">
+        <h3>Modifica Libro</h3>
+      </div>
       <!-- Dropdown per selezionare il libro -->
-      <div class="mb-3">
+      <div class="mb-3"><!--mb-3-->
         <label for="libro" class="form-label">Seleziona il Libro</label>
         <select id="libro" class="form-control" v-model="selectedLibroId" @change="caricaDettagliLibro">
           <option value="" disabled>Seleziona un libro...</option>
@@ -72,7 +73,10 @@
             required
           ></textarea>
         </div>
-        <button class="btn btn-primary" :disabled="isSubmitting">Salva Modifiche</button>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-end">
+          
+          <button class="btn btn-primaryp me-md-2" :disabled="isSubmitting">Salva Modifiche</button>
+        </div>
       </form>
     </div>
   </template>
