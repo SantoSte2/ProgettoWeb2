@@ -25,13 +25,23 @@ ul {
     align-items: start;
 }
 
-.btn-primary {
+.btn-primaryp {
 
     text-align: center;
     padding: 5px;
     margin: 1%;
     margin-left: 5%;
     margin-bottom: 10px;
+    color: white;
+    border-bottom: #38b9fa;
+    background-color: #24b2f9;
+}
+
+.btn-primaryp:hover {
+
+    color: lightgray;
+    background-color: #0471a6;
+    /*honolulu-blu*/
 }
 
 .btn-primaryred {
@@ -46,6 +56,17 @@ ul {
 
 }
 
+.btn-primaryred:hover {
+    text-align: center;
+    padding: 5px;
+    margin: 1%;
+    margin-left: 5%;
+    margin-bottom: 10px;
+    background-color: darkred;
+    color: white;
+
+}
+
 .btn-primarywarning {
 
     text-align: center;
@@ -53,7 +74,20 @@ ul {
     margin: 1%;
     margin-left: 5%;
     margin-bottom: 10px;
-    background-color: #ffca2c;
+    background-color: #ffb41f;
+    /*colore del testo del pulsante*/
+    color: black;
+
+}
+
+.btn-primarywarning:hover {
+
+    text-align: center;
+    padding: 5px;
+    margin: 1%;
+    margin-left: 5%;
+    margin-bottom: 10px;
+    background-color: #cc8800;
     /*colore del testo del pulsante*/
     color: black;
 
@@ -70,6 +104,12 @@ ul {
     /*colore del testo del pulsante*/
     color: white;
 
+}
+
+.btn-primarysecond:hover {
+
+    background-color: #343a40;
+    color: white;
 }
 
 .navbar {

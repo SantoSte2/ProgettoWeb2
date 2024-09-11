@@ -2,8 +2,13 @@
   <div class="container-md mx-1.5 border"><!--mx-4 my-2 px-2 py-3/container-md-->
     <!-- Se l'utente è loggato, mostra il pulsante di logout, altrimenti mostra il modulo di login/registrazione -->
     <div v-if="isLoggedIn">
-      <p>Benvenuto, {{ username }}!</p>
-      <button class="btn btn-danger" @click="onLogout">Logout</button>
+      <div class="container">
+        <p>Benvenuto, {{ username }}!</p>
+      </div>
+      <div class="d-grid gap-2 d-md-flex justify-content-sm-end">
+        <button class="btn btn-primaryred me-md-2" @click="onLogout">Logout</button>
+      </div>
+
     </div>
     <div v-else>
       <div v-if="isRegistering">
@@ -30,9 +35,10 @@
                 placeholder="Conferma Password" required>
             </div>
           </div>
-          <div class="container mt-2 text-end">
-            <button type="submit" class="btn btn-primary">Registra</button>
-            <button type="button" class="btn btn-secondary ms-2" @click="toggleForm">Torna a Login</button>
+          <div class="d-grid gap-2 d-sm-flex justify-content-sm-end">
+            <!--container mt-2 text-end/d-grid gap-2 d-md-flex justify-content-sm-end-->
+            <button type="submit" class="btn btn-primaryp me-md-2">Registra</button>
+            <button type="button" class="btn btn-primarysecond me-md-2" @click="toggleForm">Torna a Login</button>
           </div>
         </form>
       </div>
@@ -53,9 +59,10 @@
                 required>
             </div>
           </div>
-          <div class="container mt-2 text-end">
-            <button type="submit" class="btn btn-primary btn-sm">Login</button>
-            <button type="button" class="btn btn-primarysecond btn-sm" @click="toggleForm">Vai a Registra</button>
+          <div class="d-grid gap-2 d-sm-flex justify-content-sm-end">
+            <!--container mt-2 text-end/d-grid gap-2 d-sm-flex justify-content-sm-end-->
+            <button type="submit" class="btn btn-primaryp me-md-2">Login</button>
+            <button type="button" class="btn btn-primarysecond me-md-2" @click="toggleForm">Vai a Registra</button>
           </div>
         </form>
       </div>
