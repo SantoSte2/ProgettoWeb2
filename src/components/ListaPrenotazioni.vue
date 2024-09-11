@@ -1,35 +1,38 @@
 <template>
-  <div class="container mx-4 px-2">
+  <div class="container-md mx-1.5 border"><!--container mx-4 px-2-->
     <div class="hide">
       <!-- Sezione Prenotazioni -->
-      <h3>Prenotazioni</h3>
-      <ul id="list" class="list">
-        <!-- Mostra un messaggio se non ci sono prenotazioni -->
-        <li v-if="listaPrenotazioni.length === 0">Nessuna prenotazione</li>
-        
-        <!-- Loop sulla lista delle prenotazioni -->
-        <li
-          v-for="prenotazione in listaPrenotazioni"
-          :key="prenotazione.idPrenotazione"
-        >
-          <div class="row">
-            <!-- Visualizza i campi specifici della prenotazione -->
-            <div class="col-sm-3">Titolo: {{ prenotazione.Titolo || 'Non disponibile' }}</div>
-            <div class="col-sm-3">Username: {{ prenotazione.username || 'Non disponibile' }}</div>
-            <div class="col-sm-3">Inizio: {{ formatDate(prenotazione.inizioPren) }}</div>
-            <div class="col-sm-3">Fine: {{ formatDate(prenotazione.finePren) }}</div>
-            <div class="col-sm-3">
-              <!-- Pulsante per annullare la prenotazione -->
-              <button
-                @click="annullaPrenotazione(prenotazione.idLibro, prenotazione.idUtente)"
-                class="btn btn-danger"
-              >
-                Restituisci
-              </button>
+       <div class="text-start">
+        <h3>Prenotazioni</h3>  
+       </div>
+      <div class="container">
+        <ul id="list" class="list">
+          <!-- Mostra un messaggio se non ci sono prenotazioni -->
+          <li v-if="listaPrenotazioni.length === 0">Nessuna prenotazione</li>
+          
+          <!-- Loop sulla lista delle prenotazioni -->
+          <li
+            v-for="prenotazione in listaPrenotazioni"
+            :key="prenotazione.idPrenotazione">
+
+            <div class="row">
+              <!-- Visualizza i campi specifici della prenotazione -->
+              <div class="col-sm-3">Titolo: {{ prenotazione.Titolo || 'Non disponibile' }}</div>
+              <div class="col-sm-3">Username: {{ prenotazione.username || 'Non disponibile' }}</div>
+              <div class="col-sm-2">Inizio: {{ formatDate(prenotazione.inizioPren) }}</div>
+              <div class="col-sm-2">Fine: {{ formatDate(prenotazione.finePren) }}</div>
+              <div class="d-grid gap-2 d-md-flex justify-content-sm-end"><!--col-sm-2-->
+                <!-- Pulsante per annullare la prenotazione -->
+                <button
+                  class="btn btn-primaryred me-md-2"
+                  @click="annullaPrenotazione(prenotazione.idLibro, prenotazione.idUtente)">
+                  Restituisci
+                </button>
+              </div>
             </div>
-          </div>
-        </li>
-      </ul>
+          </li>
+        </ul>
+    </div>
 
       <!-- Sezione Code -->
       <h3>Code</h3>
