@@ -418,13 +418,14 @@ app.get('/api/prenotazioni', (req, res) => {
     FROM prenotazione
     JOIN libro ON prenotazione.idLibro = libro.idLibro
     JOIN utente ON prenotazione.idUtente = utente.idUtente
-    ORDER BY prenotazione.inizioPren
   `;
 
   // Aggiungi il filtro per l'ID utente se è presente
   if (userId) {
     sql += ' WHERE prenotazione.idUtente = ?';
   }
+
+  sql += 'ORDER BY prenotazione.inizioPren';
 
   connection.query(sql, userId ? [userId] : [], (error, results) => {
     if (error) {
@@ -451,13 +452,14 @@ app.get('/api/code', (req, res) => {
     FROM coda
     JOIN libro ON coda.idLibro = libro.idLibro
     JOIN utente ON coda.idUtente = utente.idUtente
-    ORDER BY coda.dataInserimento
   `;
 
   // Aggiungi il filtro per l'ID utente se è presente
   if (userId) {
     sql += ' WHERE coda.idUtente = ?';
   }
+
+  sql += 'ORDER BY coda.dataInserimento';
 
   connection.query(sql, userId ? [userId] : [], (error, results) => {
     if (error) {
