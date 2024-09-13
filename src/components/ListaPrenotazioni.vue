@@ -53,7 +53,7 @@
                 <div class="d-grid gap-2 d-md-flex justify-content-sm-end">
                   <button
                     class="btn btn-primaryred me-md-2"
-                    @click="annullaPrenotazione(prenotazione.idLibro, prenotazione.idUtente)"
+                    @click="annullaPrenotazione(prenotazione.idLibro, prenotazione.username)"
                   >
                     Restituisci
                   </button>
@@ -65,30 +65,13 @@
       </div>
 
       <!-- Sezione Code -->
-      <h3>Code</h3>
-      <div class="container">
-        <ul id="list" class="list">
-          <!-- Mostra un messaggio se non ci sono code -->
-          <li v-if="codeFiltrate.length === 0">Nessuna coda</li>
+      <Code
+        :codeFiltrate="codeFiltrate"
+        :formatDate="formatDate"
+        :rimuoviDallaCoda="rimuoviDallaCoda"
+        @codeUpdated="fetchCode"
+      />
 
-          <!-- Loop sulla lista delle code filtrate -->
-          <li v-for="coda in codeFiltrate" :key="coda.idCoda">
-            <div class="row">
-              <div class="col-sm-3">Titolo: {{ coda.Titolo || 'Non disponibile' }}</div>
-              <div class="col-sm-3">Username: {{ coda.username || 'Non disponibile' }}</div>
-              <div class="col-sm-3">Data Inserimento: {{ formatDate(coda.dataInserimento) }}</div>
-              <div class="d-grid gap-2 d-md-flex justify-content-sm-end">
-                <button
-                  @click="rimuoviDallaCoda(coda.idLibro, coda.idUtente)"
-                  class="btn btn-primaryred me-md-2"
-                >
-                  Rimuovi dalla coda
-                </button>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </div>
     </div>
   </div>
 </template>
@@ -99,6 +82,7 @@ import axios from 'axios';
 import { useToast } from 'vue-toastification';
 import moment from 'moment';
 import { useUserStore } from '@/stores/user'; // Importa lo store
+import Code from './Code.vue'; // Assicurati che il percorso sia corretto
 
 const emit = defineEmits(['prenotazioneAnnullata']);
 
