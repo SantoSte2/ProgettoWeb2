@@ -493,6 +493,20 @@ app.delete('/api/code/:idLibro', (req, res) => {
   });
 });
 
+// Endpoint per ottenere la lista di tutti gli utenti
+app.get('/api/utenti', (req, res) => {
+  const query = 'SELECT idUtente, username FROM utente';
+
+  connection.query(query, (error, results) => {
+    if (error) {
+      console.error('Errore durante il recupero degli utenti:', error);
+      return res.status(500).json({ error: 'Errore nel recupero degli utenti.' });
+    }
+
+    res.json(results);
+  });
+});
+
 // Avvio del server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
