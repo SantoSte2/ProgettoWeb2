@@ -70,7 +70,7 @@
       </div>
     </div>
       <div class="container-md mx-1.5 border">
-        <div class="hide">
+        
           <!-- Sezione Code -->
           <Code
             :codeFiltrate="codeFiltrate"
@@ -78,7 +78,7 @@
             :rimuoviDallaCoda="rimuoviDallaCoda"
             @codeUpdated="fetchCode"
           /> 
-        </div>
+        
       </div>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div class="container-md mx-1.5 border">
+  
       <div class="hide">
           <div class="text-start">
               <h3>Code</h3>
@@ -33,7 +33,7 @@
               </ul>
           </div>
       </div>
-  </div>    
+     
 </template>
 
 <script setup>
