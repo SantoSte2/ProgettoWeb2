@@ -1,5 +1,5 @@
 <template>
-  <div class="navbar px-2">
+  <div class="navbar">
     <div class="container-fluid">
       <nav class="navbar navbar-expand-sm bg-body-tertiary">
         <div class="container-fluid">

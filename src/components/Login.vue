@@ -1,16 +1,15 @@
 <template>
-  <div class="container-md mx-1.5 border"><!--mx-4 my-2 px-2 py-3/container-md-->
+  <div class="container-fluid"><!--mx-4 my-2 px-2 py-3/container-md-->
     <!-- Se l'utente è loggato, mostra il pulsante di logout, altrimenti mostra il modulo di login/registrazione -->
-    <div v-if="isLoggedIn">
-      <div class="container">
+    <div class="container-fluid border" v-if="isLoggedIn">
         <p>Benvenuto, {{ username }}!</p>
-      </div>
+      
       <div class="d-grid gap-2 d-md-flex justify-content-sm-end">
         <button class="btn btn-primaryred me-md-2" @click="onLogout">Logout</button>
       </div>
 
     </div>
-    <div v-else>
+    <div class="container gx-1 border" v-else>
       <div v-if="isRegistering">
         <!-- Modulo di registrazione -->
         <form @submit.prevent="onRegister">
@@ -42,23 +41,19 @@
           </div>
         </form>
       </div>
-      <div v-else>
+      <div class="container" v-else>
         <!-- Modulo di login -->
         <form @submit.prevent="onLogin">
-          <div class="container mb-3">
-            <div class="form-group">
+            <div class="form-group mt-3 mb-3">
               <label for="loginEmail">Email</label>
               <input type="email" class="form-control" id="loginEmail" v-model="email" placeholder="Inserire email"
                 required>
             </div>
-          </div>
-          <div class="container mb-3">
-            <div class="form-group">
+            <div class="form-group mb-3">
               <label for="loginPassword">Password</label>
               <input type="password" class="form-control" id="loginPassword" v-model="password" placeholder="Password"
                 required>
             </div>
-          </div>
           <div class="d-grid gap-2 d-sm-flex justify-content-sm-end">
             <!--container mt-2 text-end/d-grid gap-2 d-sm-flex justify-content-sm-end-->
             <button type="submit" class="btn btn-primaryp me-md-2">Login</button>

@@ -1,4 +1,5 @@
 <template>
+  <div class="container-fluid">
     <div class="container-md mx-1.5 border"><!--container mx-4 my-2 px-2 py-4 border-->
       <div class="text-start">
         <h3>Modifica Libro</h3>
@@ -79,6 +80,7 @@
         </div>
       </form>
     </div>
+  </div>
   </template>
   
   <script setup>

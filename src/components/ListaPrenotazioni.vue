@@ -1,78 +1,85 @@
 <template>
-  <div class="container-md mx-1.5 border">
-    <div class="hide">
-      <!-- Mostra i filtri solo se l'utente è un bibliotecario -->
-      <div v-if="userStore.isLibr" class="text-start mb-3">
-        <h3>Filtri</h3>
-        <div class="row mb-3">
-          <div class="col-sm-6">
-            <select v-model="filtroUtente" class="form-select">
-              <option value="">Qualsiasi Utente</option>
-              <option
-                v-for="utente in listaUtenti"
-                :key="utente.idUtente"
-                :value="utente.username"
-              >
-                {{ utente.username }}
-              </option>
-            </select>
-          </div>
-          <div class="col-sm-6">
-            <select v-model="filtroLibro" class="form-select">
-              <option value="">Qualsiasi Libro</option>
-              <option
-                v-for="libro in listaLibri"
-                :key="libro.idLibro"
-                :value="libro.Titolo"
-              >
-                {{ libro.Titolo }}
-              </option>
-            </select>
+  <div class="container-fluid">
+    <div class="container-md mx-1.5 border">
+      <div class="hide">
+        <!-- Mostra i filtri solo se l'utente è un bibliotecario -->
+        <div v-if="userStore.isLibr" class="text-start mb-3">
+          <h3>Filtri</h3>
+          <div class="row mb-3">
+            <div class="col-sm-6">
+              <select v-model="filtroUtente" class="form-select">
+                <option value="">Qualsiasi Utente</option>
+                <option
+                  v-for="utente in listaUtenti"
+                  :key="utente.idUtente"
+                  :value="utente.username"
+                >
+                  {{ utente.username }}
+                </option>
+              </select>
+            </div>
+            <div class="col-sm-6">
+              <select v-model="filtroLibro" class="form-select">
+                <option value="">Qualsiasi Libro</option>
+                <option
+                  v-for="libro in listaLibri"
+                  :key="libro.idLibro"
+                  :value="libro.Titolo"
+                >
+                  {{ libro.Titolo }}
+                </option>
+              </select>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Sezione Prenotazioni -->
-      <div class="text-start">
-        <h3>Prenotazioni</h3>
-        <div class="container">
-          <ul id="list" class="list">
-            <!-- Mostra un messaggio se non ci sono prenotazioni -->
-            <li v-if="prenotazioniFiltrate.length === 0">Nessuna prenotazione</li>
+        <!-- Sezione Prenotazioni -->
+        <div class="text-start">
+          <h3>Prenotazioni</h3>
+          <div class="container">
+            <ul id="list" class="list">
+              <!-- Mostra un messaggio se non ci sono prenotazioni -->
+              <li v-if="prenotazioniFiltrate.length === 0">Nessuna prenotazione</li>
 
-            <!-- Loop sulla lista delle prenotazioni filtrate -->
-            <li
-              v-for="prenotazione in prenotazioniFiltrate"
-              :key="prenotazione.idPrenotazione"
-            >
-              <div class="row">
-                <div class="col-sm-3">Titolo: {{ prenotazione.Titolo || 'Non disponibile' }}</div>
-                <div class="col-sm-3">Username: {{ prenotazione.username || 'Non disponibile' }}</div>
-                <div class="col-sm-2">Inizio: {{ formatDate(prenotazione.inizioPren) }}</div>
-                <div class="col-sm-2">Fine: {{ formatDate(prenotazione.finePren) }}</div>
-                <div class="d-grid gap-2 d-md-flex justify-content-sm-end">
-                  <button
-                    class="btn btn-primaryred me-md-2"
-                    @click="annullaPrenotazione(prenotazione.idLibro, prenotazione.username)"
-                  >
-                    Restituisci
-                  </button>
+              <!-- Loop sulla lista delle prenotazioni filtrate -->
+              <li
+                v-for="prenotazione in prenotazioniFiltrate"
+                :key="prenotazione.idPrenotazione"
+              >
+                <div class="row">
+                  <div class="col-sm-3">Titolo: {{ prenotazione.Titolo || 'Non disponibile' }}</div>
+                  <div class="col-sm-3">Username: {{ prenotazione.username || 'Non disponibile' }}</div>
+                  <div class="col-sm-2">Inizio: {{ formatDate(prenotazione.inizioPren) }}</div>
+                  <div class="col-sm-2">Fine: {{ formatDate(prenotazione.finePren) }}</div>
+                  <div class="d-grid gap-2 d-md-flex justify-content-sm-end">
+                    <button
+                      class="btn btn-primaryred me-md-2"
+                      @click="annullaPrenotazione(prenotazione.idLibro, prenotazione.username)"
+                    >
+                      Restituisci
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </li>
-          </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        
+
+      </div>
+    </div>
+      <div class="container-md mx-1.5 border">
+        <div class="hide">
+          <!-- Sezione Code -->
+          <Code
+            :codeFiltrate="codeFiltrate"
+            :formatDate="formatDate"
+            :rimuoviDallaCoda="rimuoviDallaCoda"
+            @codeUpdated="fetchCode"
+          /> 
         </div>
       </div>
-
-      <!-- Sezione Code -->
-      <Code
-        :codeFiltrate="codeFiltrate"
-        :formatDate="formatDate"
-        :rimuoviDallaCoda="rimuoviDallaCoda"
-        @codeUpdated="fetchCode"
-      />
-
-    </div>
   </div>
 </template>
 
