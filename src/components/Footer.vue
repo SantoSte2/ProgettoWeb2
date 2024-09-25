@@ -1,6 +1,6 @@
 <template>
-    <div class="container-fluid mt-5 mb-5 rounded foot">
-        <div class="container gx-1">
+    <div class="container-fluid mt-5 mb-5 rounded">
+        <div class="container gx-1 foot">
             <div class="row mb-5">
                 <div class="col-sm-8">
                     <ul class="list-group list-group-flush">
