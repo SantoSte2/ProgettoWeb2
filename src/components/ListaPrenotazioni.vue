@@ -47,16 +47,18 @@
                 :key="prenotazione.idPrenotazione"
               >
                 <div class="row">
-                  <div class="col-sm-3">Titolo: {{ prenotazione.Titolo || 'Non disponibile' }}</div>
-                  <div class="col-sm-3">Username: {{ prenotazione.username || 'Non disponibile' }}</div>
+                  <div class="col-sm-2">Titolo: {{ prenotazione.Titolo || 'Non disponibile' }}</div>
+                  <div class="col-md-3 text-break">Username: {{ prenotazione.username || 'Non disponibile' }}</div>
                   <div class="col-sm-2">Inizio: {{ formatDate(prenotazione.inizioPren) }}</div>
                   <div class="col-sm-2">Fine: {{ formatDate(prenotazione.finePren) }}</div>
                   <div class="d-grid gap-2 d-md-flex justify-content-sm-end">
+                    <!--<img src={{ prenotazione.immagine }} :alt='copertina '/>-->
                     <button
                       class="btn btn-primaryred me-md-2"
                       @click="annullaPrenotazione(prenotazione.idLibro, prenotazione.username)"
-                    >
-                      Restituisci
+
+                    >Restituisci
+
                     </button>
                   </div>
                 </div>
