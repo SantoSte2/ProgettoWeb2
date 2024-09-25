@@ -12,7 +12,7 @@
 <script setup>
 import AddCard from '../components/AddCard.vue';
 import ModificaLibro from '../components/ModificaLibro.vue';
-import Footer from '@/components/Footer.vue';
+import Footer from '../components/Footer.vue';
 import { ref, onMounted } from 'vue';
 import { useToast } from 'vue-toastification';
 

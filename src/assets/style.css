@@ -116,4 +116,14 @@ ul {
 .navbar {
 
     align-items: start;
+    width: 100%;
+}
+
+.router-link-exact-active {
+
+    border-bottom: 1px solid #123456;
+}
+
+.foot {
+    background-color: #dee0e3;
 }

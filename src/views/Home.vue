@@ -11,7 +11,7 @@
 
 //import ListaLibri from '../components/ListaLibri.vue';
 import CardLibri from '../components/CardLibri.vue';
-import Footer from '@/components/Footer.vue';
+import Footer from '../components/Footer.vue';
 
 
 import { defineProps } from 'vue';

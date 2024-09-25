@@ -35,11 +35,5 @@ const isLibr = computed(() => userStore.isLibr);
 </script>
 
 <style lang="css">
-.router-link-exact-active {
-  border-bottom: 1px solid #123456;
-}
 
-.navbar {
-  width: 100%;
-}
 </style>

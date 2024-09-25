@@ -9,6 +9,6 @@
 <script setup>
 
 import ListaPrenotazioni from '../components/ListaPrenotazioni.vue';  // Nuovo componente importato
-import Footer from '@/components/Footer.vue';
+import Footer from '../components/Footer.vue';
 
 </script>
