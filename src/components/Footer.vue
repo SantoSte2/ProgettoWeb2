@@ -6,11 +6,11 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item foot">Sito internet creato da Stefano S. al Front-End e Andrea P. al Back-End
                         </li>
-                        <li class="list-group-item">Ringraziamenti al Prof G. Delnevo e ai tutor</li>
-                        <li class="list-group-item">ESAME DI INGEGNERIA WEB</li>
-                        <li class="list-group-item">Università di Bologna</li>
-                        <li class="list-group-item">Campus Cesena</li>
-                        <li class="list-group-item text-center fs-2 fw-bolder">BIBLO</li>
+                        <li class="list-group-item foot">Ringraziamenti al Prof G. Delnevo e ai tutor</li>
+                        <li class="list-group-item foot">ESAME DI INGEGNERIA WEB</li>
+                        <li class="list-group-item foot">Università di Bologna</li>
+                        <li class="list-group-item foot">Campus Cesena</li>
+                        <li class="list-group-item text-center fs-2 fw-bolder foot">BIBLO</li>
                     </ul>
                 </div>
                 <div class="col-sm-4">
