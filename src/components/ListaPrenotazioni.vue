@@ -55,7 +55,7 @@
                     <!--<img src={{ prenotazione.immagine }} :alt='copertina '/>-->
                     <button
                       class="btn btn-primaryred me-md-2"
-                      @click="annullaPrenotazione(prenotazione.idLibro, prenotazione.username)"
+                      @click="annullaPrenotazione(prenotazione.idLibro, prenotazione.idUtente)"
 
                     >Restituisci
 
@@ -172,6 +172,8 @@ const annullaPrenotazione = async (idLibro, username) => {
       (prenotazione) => prenotazione.idLibro !== idLibro || prenotazione.username !== username
     );
     toast.success('Prenotazione annullata');
+    await fetchPrenotazioni();
+    await fetchCode();
     emit('prenotazioneAnnullata', idLibro); // Emetti l'evento per il componente padre, se necessario
   } catch (error) {
     toast.error('Errore durante l\'annullamento della prenotazione');
@@ -192,6 +194,7 @@ const rimuoviDallaCoda = async (idLibro, username) => {
       (coda) => coda.idLibro !== idLibro || coda.username !== username
     );
     toast.success('Utente rimosso dalla coda');
+    await fetchCode();
   } catch (error) {
     toast.error('Errore durante la rimozione dalla coda');
     console.error(error);

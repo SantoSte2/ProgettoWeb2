@@ -22,7 +22,7 @@
                           <div class="d-grid gap-2 d-md-flex justify-content-sm-end">
                               <!-- Pulsante per rimuovere l'utente dalla coda -->
                               <button
-                                  @click="rimuoviDallaCoda(coda.idLibro, coda.username)"
+                                  @click="rimuoviDallaCoda(coda.idLibro, coda.idUtente)"
                                   class="btn btn-primaryred me-md-2"
                               >
                                   Rimuovi dalla coda

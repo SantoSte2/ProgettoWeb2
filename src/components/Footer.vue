@@ -10,7 +10,7 @@
                         <li class="list-group-item foot">ESAME DI INGEGNERIA WEB</li>
                         <li class="list-group-item foot">Università di Bologna</li>
                         <li class="list-group-item foot">Campus Cesena</li>
-                        <li class="list-group-item text-center fs-2 fw-bolder foot">BIBLO</li>
+                        <li class="list-group-item text-center fs-2 fw-bolder foot">BIBLIO</li>
                     </ul>
                 </div>
                 <div class="col-sm-4">
