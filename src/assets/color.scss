@@ -1,0 +1,143 @@
+$mywhite: #fffff1;
+$myblack: #000001;
+$myprimary: #38b9fa;
+$myprimaryback: #0471a6;
+$myred: red;
+$myredback: darkred;
+$mywarning: #ffb41f;
+$mywarningback: #cc8800;
+$mysecond: #6c757d;
+$mysecondback: #343a40;
+$activenavbar: #123456;
+$backfooter: #dee0e3;
+$mylightgray: #d3d3d3;
+
+/*ATTENZIONE tipo di file scss Extended (non Compressed) cioè non è tutto su di una linea il comando ma indentato e con gli acapo
+ le REGOLE DI STILE funzionano allo stesso modo del css 
+ ATTENZIONE posso usare !global per forzare delle regole di css al di fuori di specifici punti usandolo sulle variabili
+ -> supporta operazioni con + - * / solo se usati dentro le parentesi ()
+ -> ATTENZIONE agli spazi, scrivere le formule tutte di seguito senza spazi perche se no non esegue il codice
+ DRY Don't Repeat Yourself -> aiuta a non fare errori
+ -> direttiva @import importo il codice scss anche in altri file rendendo tutto più modulare
+    posso creare un file con solo i colorio variabili ed importarlo nel file css con la @import"colors" -> "_colors.scss"
+ -> direttiva @media si usa per gli schermi e le media query
+ -> direttiva @extend estende delle regole css aggiungendo altro
+ -> utilizzo per @extended il placeorder (%) percento per destinare alcune classi ad essere estese, dopo, in futuro
+ -> subisce le direttive di controllo @if @for @each @while
+ -> direttiva @mixin definisco stili o regole da usare in  più parti del file, quindi riuso del codice
+    sono comodi perche possono ricevere degli input (come le funzioni), posso anche definire dei valori default
+ -> direttiva @include da usare con @mixin, include a mixin tutte le regole di stile in più
+    posso definire un numero di argomenti sconosciuto per la mixin
+ATTENZIONE sass può anche panipolare stringhe colori e numeri con funzioni
+ -> è possibile definire funzioni nostre quindi personalizzabili
+ */
+// commendo in line
+.card-text {
+    display: -webkit-box;
+    /* Fai sì che l'elemento utilizzi una visualizzazione a "box" */
+    -webkit-box-orient: vertical;
+    /* Specifica che il box è orientato verticalmente */
+    overflow: hidden;
+    /* Nasconde il testo che eccede il limite */
+    text-overflow: ellipsis;
+    /* Aggiunge i tre puntini "..." alla fine del testo tagliato */
+    -webkit-line-clamp: 5;
+}
+
+.card-img-top {
+    margin-top: 10px;
+    width: 100%
+}
+
+.plus {
+    align-items: start;
+}
+
+.btn-primaryp {
+
+    text-align: center;
+    padding: 5px;
+    margin: 1%;
+    margin-left: 5%;
+    margin-bottom: 10px;
+    color: $mywhite;
+    border-bottom: $myprimary;
+    background-color: $myprimary;
+
+    &:hover {
+        /*ATTENZIONE nesting delle regole css come vuole il scss*/
+        /*ATTENZIONE forse va messo & davanti al : del hover per indicare il "padre" del hover cioè il btn-primary*/
+        color: $mylightgray;
+        background-color: $myprimaryback;
+        /*honolulu-blu*/
+    }
+
+}
+
+.btn-primaryred {
+
+    text-align: center;
+    padding: 5px;
+    margin: 1%;
+    margin-left: 5%;
+    margin-bottom: 10px;
+    background-color: $myred;
+    color: $mywhite;
+
+    &:hover {
+        color: $mylightgray;
+        background-color: $myredback;
+    }
+
+}
+
+.btn-primarywarning {
+
+    text-align: center;
+    padding: 5px;
+    margin: 1%;
+    margin-left: 5%;
+    margin-bottom: 10px;
+    background-color: $mywarning;
+    /*colore del testo del pulsante*/
+    color: $myblack;
+
+    &:hover {
+        color: $mylightgray;
+        background-color: $mywarningback;
+    }
+
+}
+
+.btn-primarysecond {
+
+    text-align: center;
+    padding: 5px;
+    margin: 1%;
+    margin-left: 5%;
+    margin-bottom: 10px;
+    background-color: $mysecond;
+    /*colore del testo del pulsante*/
+    color: $mywhite;
+
+    &:hover {
+        color: $mylightgray;
+        background-color: $mysecondback;
+    }
+
+}
+
+.navbar {
+
+    align-items: start;
+    width: 100%;
+}
+
+.router-link-exact-active {
+
+    border-bottom: 1px solid $activenavbar;
+}
+
+.foot {
+    background-color: $backfooter;
+}

@@ -1,10 +1,3 @@
-/*
-ul {
-    background-color: aquamarine;
-    border-bottom: solid 1px black;
-
-}
-*/
 .card-text {
     display: -webkit-box;
     /* Fai sì che l'elemento utilizzi una visualizzazione a "box" */
@@ -40,7 +33,7 @@ ul {
 
 .btn-primaryp:hover {
 
-    color: lightgray;
+    color: #d3d3d3;
     background-color: #0471a6;
     /*honolulu-blu*/
 }
