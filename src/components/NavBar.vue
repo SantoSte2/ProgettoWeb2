@@ -14,7 +14,8 @@
               </RouterLink>
               <!-- Link "Aggiungi Libro" visibile solo se isLibr è true -->
               <RouterLink v-if="isLibr" class="nav-link" aria-current="page" to="/AddLibro">Aggiungi Libro</RouterLink>
-              <RouterLink class="nav-link" aria-current="page" to="/Login">Login</RouterLink>
+              <RouterLink v-if="isLoggedIn" class="nav-link" aria-current="page" to="/Login">Logout</RouterLink>
+              <RouterLink v-else class="nav-link" aria-current="page" to="/Login">Login</RouterLink>
             </div>
           </div>
         </div>
