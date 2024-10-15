@@ -413,6 +413,7 @@ app.get('/api/prenotazioni', (req, res) => {
       libro.Titolo,
       prenotazione.idUtente,
       utente.username AS username,
+      libro.immagine AS immagine,
       prenotazione.inizioPren,
       prenotazione.finePren
     FROM prenotazione
@@ -448,6 +449,7 @@ app.get('/api/code', (req, res) => {
       libro.Titolo,
       coda.idUtente,
       utente.username AS username,
+      libro.immagine AS immagine,
       coda.dataInserimento
     FROM coda
     JOIN libro ON coda.idLibro = libro.idLibro

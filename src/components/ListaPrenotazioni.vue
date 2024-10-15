@@ -37,7 +37,7 @@
         <div class="text-start">
           <h3>Prenotazioni</h3>
           <div class="container">
-            <ul id="list" class="list">
+            <ul id="list" class="list-unstyled">
               <!-- Mostra un messaggio se non ci sono prenotazioni -->
               <li v-if="prenotazioniFiltrate.length === 0">Nessuna prenotazione</li>
 
@@ -47,6 +47,9 @@
                 :key="prenotazione.idPrenotazione"
               >
                 <div class="row">
+                  <div class="col-sm-1">
+                    <img :src="prenotazione.immagine" alt="Copertina libro" class="book-bullet">
+                  </div>
                   <div class="col-sm-2">Titolo: {{ prenotazione.Titolo || 'Non disponibile' }}</div>
                   <div class="col-md-3 text-break">Username: {{ prenotazione.username || 'Non disponibile' }}</div>
                   <div class="col-sm-2">Inizio: {{ formatDate(prenotazione.inizioPren) }}</div>

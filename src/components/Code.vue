@@ -5,7 +5,7 @@
               <h3>Code</h3>
           </div>
           <div class="dov">
-              <ul id="list" class="list">
+              <ul id="list" class="list-unstyled">
                   <!-- Mostra un messaggio se non ci sono code -->
                   <li v-if="codeFiltrate.length === 0">Nessuna coda</li>
               
@@ -15,6 +15,9 @@
                   :key="coda.idCoda"
                   >
                       <div class="row">
+                        <div class="col-sm-1">
+                            <img :src="coda.immagine" alt="Copertina libro" class="book-bullet">
+                        </div>
                           <!-- Visualizza i campi specifici della coda -->
                           <div class="col-sm-3">Titolo: {{ coda.Titolo || 'Non disponibile' }}</div>
                           <div class="col-sm-3">Username: {{ coda.username || 'Non disponibile' }}</div>

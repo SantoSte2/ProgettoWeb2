@@ -141,3 +141,15 @@ ATTENZIONE sass può anche panipolare stringhe colori e numeri con funzioni
 .foot {
     background-color: $backfooter;
 }
+
+ul.list-unstyled {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.book-bullet {
+    width: 50px; /* Imposta la larghezza dell'immagine */
+    height: auto; /* Mantiene le proporzioni */
+    object-fit: cover; /* Fa in modo che l'immagine si adatti bene */
+    border-radius: 4px; /* Facoltativo: arrotonda gli angoli dell'immagine */
+}
