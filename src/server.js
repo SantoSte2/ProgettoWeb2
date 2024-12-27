@@ -59,6 +59,7 @@ app.get('/api/libri', (req, res) => {
   });
 });
 
+// Endpoint per ottenere un libro specifico
 app.get('/api/libri/:id', (req, res) => {
   const id = req.params.id;
 
@@ -78,6 +79,7 @@ app.get('/api/libri/:id', (req, res) => {
   });
 });
 
+//Aggiungo un libro
 app.put('/api/libri/:id', (req, res) => {
   const id = req.params.id;
   const { Titolo, Autore, numCopie, trama, immagine } = req.body;
@@ -325,6 +327,7 @@ app.patch('/api/libri/restituisci/:id', (req, res) => {
   });
 });
 
+//Aggiungo un libro nuovo
 app.post('/api/libri/aggiungi', (req, res) => {
     const { titoloCard, autoreCard, copieCard, descrizione, imgurl } = req.body;
 
@@ -380,6 +383,7 @@ app.post('/api/login', (req, res) => {
     });
   });
 
+  //Endpoint per registrarsi
   app.post('/api/utenti/registrazione', (req, res) => {
     const { email, password } = req.body;
 
@@ -438,6 +442,7 @@ app.get('/api/prenotazioni', (req, res) => {
   });
 });
 
+//Endpoint per ricevere le code
 app.get('/api/code', (req, res) => {
   // Ottieni l'ID utente dalla query string
   const userId = req.query.userId;
@@ -473,6 +478,7 @@ app.get('/api/code', (req, res) => {
   });
 });
 
+//Cancello una coda
 app.delete('/api/code/:idLibro', (req, res) => {
   const idLibro = req.params.idLibro;
   const { idUtente } = req.body;
