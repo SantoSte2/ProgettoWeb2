@@ -4,7 +4,7 @@
           <div class="text-start">
               <h3>Code</h3>
           </div>
-          <div class="dov">
+          <div class="container"><!--class ="dov"-->
               <ul id="list" class="list-unstyled">
                   <!-- Mostra un messaggio se non ci sono code -->
                   <li v-if="codeFiltrate.length === 0">Nessuna coda</li>
@@ -19,8 +19,8 @@
                             <img :src="coda.immagine" alt="Copertina libro" class="book-bullet">
                         </div>
                           <!-- Visualizza i campi specifici della coda -->
-                          <div class="col-sm-3">Titolo: {{ coda.Titolo || 'Non disponibile' }}</div>
-                          <div class="col-sm-3">Username: {{ coda.username || 'Non disponibile' }}</div>
+                          <div class="col-md-3">Titolo: {{ coda.Titolo || 'Non disponibile' }}</div>
+                          <div class="col-md-3 text-break">Username: {{ coda.username || 'Non disponibile' }}</div>
                           <div class="col-sm-3">Data Inserimento: {{ formatDate(coda.dataInserimento) }}</div>
                           <div class="d-grid gap-2 d-md-flex justify-content-sm-end">
                               <!-- Pulsante per rimuovere l'utente dalla coda -->
